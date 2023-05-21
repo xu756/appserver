@@ -34,7 +34,7 @@ func (s *LoginRpcServer) MiniLoginByAuth(ctx context.Context, in *pb.MiniAuthReq
 
 func (s *LoginRpcServer) GetCaptcha(ctx context.Context, in *pb.Empty) (*pb.CaptchaResp, error) {
 	l := logic.NewGetCaptchaLogic(ctx, s.svcCtx)
-	return l.GetCaptcha(in)
+	return l.GetCaptcha()
 }
 
 func (s *LoginRpcServer) CaptchaCompare(ctx context.Context, in *pb.CaptchaCheckReq) (*pb.CaptchaCheckResp, error) {
