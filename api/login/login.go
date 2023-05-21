@@ -3,16 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
-
-	"github.com/xu756/appserver/api/mini/internal/config"
-	"github.com/xu756/appserver/api/mini/internal/handler"
-	"github.com/xu756/appserver/api/mini/internal/svc"
+	"github.com/xu756/appserver/api/login/internal/config"
+	"github.com/xu756/appserver/api/login/internal/handler"
+	"github.com/xu756/appserver/api/login/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = flag.String("f", "etc/mini-api.yaml", "the config file")
+var configFile = flag.String("f", "etc/login-api.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -25,7 +24,6 @@ func main() {
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
-
-	fmt.Printf("【启动小程序api成功】 at %s:%d...\n", c.Host, c.Port)
+	fmt.Printf("【启动登录api成功】 at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

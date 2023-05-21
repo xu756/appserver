@@ -31,3 +31,13 @@ func (s *LoginRpcServer) MiniLoginByAuth(ctx context.Context, in *pb.MiniAuthReq
 	l := logic.NewMiniLoginByAuthLogic(ctx, s.svcCtx)
 	return l.MiniLoginByAuth(in)
 }
+
+func (s *LoginRpcServer) GetCaptcha(ctx context.Context, in *pb.Empty) (*pb.CaptchaResp, error) {
+	l := logic.NewGetCaptchaLogic(ctx, s.svcCtx)
+	return l.GetCaptcha(in)
+}
+
+func (s *LoginRpcServer) CaptchaCompare(ctx context.Context, in *pb.CaptchaCheckReq) (*pb.CaptchaCheckResp, error) {
+	l := logic.NewCaptchaCompareLogic(ctx, s.svcCtx)
+	return l.CaptchaCompare(in)
+}

@@ -1,0 +1,9 @@
+syntax = "v1"
+
+info(
+    title: "网页api"
+    desc: "网页api"
+    author: "xu756"
+    email: "756334744@qq.com"
+    version: "v1"
+)

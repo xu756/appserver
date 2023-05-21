@@ -16,7 +16,26 @@ message MiniAuthReq {
   string Code = 1;
 }
 
+message Empty {}
+//  图形验证码
+message CaptchaResp{
+  int64 code = 1;
+  string key =2;
+  string image = 3;
+  string thumb = 4;
+}
+// 验证码比对
+message CaptchaCheckReq{
+  string dots = 1;
+  string key = 2;
+}
+message CaptchaCheckResp{
+  bool result = 1;
+}
+
 service LoginRpc {
   rpc MiniLoginByMobile (loginReq) returns (loginResp);
   rpc MiniLoginByAuth (MiniAuthReq) returns (loginResp);
+  rpc GetCaptcha (Empty) returns (CaptchaResp);
+  rpc CaptchaCompare (CaptchaCheckReq) returns (CaptchaCheckResp);
 }

@@ -11,7 +11,6 @@ import (
 
 // HttpResult http返回
 func HttpResult(r *http.Request, w http.ResponseWriter, resp interface{}, err error) {
-	logx.Error("【API-错误】 : %+v ", err)
 	if err == nil {
 		// 成功返回
 		r := Success(resp)

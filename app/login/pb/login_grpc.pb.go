@@ -24,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 type LoginRpcClient interface {
 	MiniLoginByMobile(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	MiniLoginByAuth(ctx context.Context, in *MiniAuthReq, opts ...grpc.CallOption) (*LoginResp, error)
+	GetCaptcha(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CaptchaResp, error)
+	CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error)
 }
 
 type loginRpcClient struct {
@@ -52,12 +54,32 @@ func (c *loginRpcClient) MiniLoginByAuth(ctx context.Context, in *MiniAuthReq, o
 	return out, nil
 }
 
+func (c *loginRpcClient) GetCaptcha(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CaptchaResp, error) {
+	out := new(CaptchaResp)
+	err := c.cc.Invoke(ctx, "/pb.LoginRpc/GetCaptcha", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *loginRpcClient) CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error) {
+	out := new(CaptchaCheckResp)
+	err := c.cc.Invoke(ctx, "/pb.LoginRpc/CaptchaCompare", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LoginRpcServer is the server API for LoginRpc service.
 // All implementations must embed UnimplementedLoginRpcServer
 // for forward compatibility
 type LoginRpcServer interface {
 	MiniLoginByMobile(context.Context, *LoginReq) (*LoginResp, error)
 	MiniLoginByAuth(context.Context, *MiniAuthReq) (*LoginResp, error)
+	GetCaptcha(context.Context, *Empty) (*CaptchaResp, error)
+	CaptchaCompare(context.Context, *CaptchaCheckReq) (*CaptchaCheckResp, error)
 	mustEmbedUnimplementedLoginRpcServer()
 }
 
@@ -70,6 +92,12 @@ func (UnimplementedLoginRpcServer) MiniLoginByMobile(context.Context, *LoginReq)
 }
 func (UnimplementedLoginRpcServer) MiniLoginByAuth(context.Context, *MiniAuthReq) (*LoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MiniLoginByAuth not implemented")
+}
+func (UnimplementedLoginRpcServer) GetCaptcha(context.Context, *Empty) (*CaptchaResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCaptcha not implemented")
+}
+func (UnimplementedLoginRpcServer) CaptchaCompare(context.Context, *CaptchaCheckReq) (*CaptchaCheckResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CaptchaCompare not implemented")
 }
 func (UnimplementedLoginRpcServer) mustEmbedUnimplementedLoginRpcServer() {}
 
@@ -120,6 +148,42 @@ func _LoginRpc_MiniLoginByAuth_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LoginRpc_GetCaptcha_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginRpcServer).GetCaptcha(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.LoginRpc/GetCaptcha",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginRpcServer).GetCaptcha(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LoginRpc_CaptchaCompare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CaptchaCheckReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginRpcServer).CaptchaCompare(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.LoginRpc/CaptchaCompare",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginRpcServer).CaptchaCompare(ctx, req.(*CaptchaCheckReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LoginRpc_ServiceDesc is the grpc.ServiceDesc for LoginRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +198,14 @@ var LoginRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MiniLoginByAuth",
 			Handler:    _LoginRpc_MiniLoginByAuth_Handler,
+		},
+		{
+			MethodName: "GetCaptcha",
+			Handler:    _LoginRpc_GetCaptcha_Handler,
+		},
+		{
+			MethodName: "CaptchaCompare",
+			Handler:    _LoginRpc_CaptchaCompare_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

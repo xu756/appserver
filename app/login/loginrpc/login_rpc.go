@@ -13,13 +13,19 @@ import (
 )
 
 type (
-	LoginReq    = pb.LoginReq
-	LoginResp   = pb.LoginResp
-	MiniAuthReq = pb.MiniAuthReq
+	CaptchaCheckReq  = pb.CaptchaCheckReq
+	CaptchaCheckResp = pb.CaptchaCheckResp
+	CaptchaResp      = pb.CaptchaResp
+	Empty            = pb.Empty
+	LoginReq         = pb.LoginReq
+	LoginResp        = pb.LoginResp
+	MiniAuthReq      = pb.MiniAuthReq
 
 	LoginRpc interface {
 		MiniLoginByMobile(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		MiniLoginByAuth(ctx context.Context, in *MiniAuthReq, opts ...grpc.CallOption) (*LoginResp, error)
+		GetCaptcha(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CaptchaResp, error)
+		CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error)
 	}
 
 	defaultLoginRpc struct {
@@ -41,4 +47,14 @@ func (m *defaultLoginRpc) MiniLoginByMobile(ctx context.Context, in *LoginReq, o
 func (m *defaultLoginRpc) MiniLoginByAuth(ctx context.Context, in *MiniAuthReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := pb.NewLoginRpcClient(m.cli.Conn())
 	return client.MiniLoginByAuth(ctx, in, opts...)
+}
+
+func (m *defaultLoginRpc) GetCaptcha(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CaptchaResp, error) {
+	client := pb.NewLoginRpcClient(m.cli.Conn())
+	return client.GetCaptcha(ctx, in, opts...)
+}
+
+func (m *defaultLoginRpc) CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error) {
+	client := pb.NewLoginRpcClient(m.cli.Conn())
+	return client.CaptchaCompare(ctx, in, opts...)
 }

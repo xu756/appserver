@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	"github.com/xu756/appserver/api/mini/internal/svc"
-	"github.com/xu756/appserver/api/mini/internal/types"
+	"github.com/xu756/appserver/api/login/internal/svc"
+	"github.com/xu756/appserver/api/login/internal/types"
 	"github.com/xu756/appserver/app/login/loginrpc"
 	"github.com/zeromicro/go-zero/core/logx"
 )

@@ -15,3 +15,19 @@ type LoginResp struct {
 type MiniAuthReq struct {
 	Code string `path:"code"`
 }
+
+type CaptchaResp struct {
+	Code  int64  `json:"code"`
+	Key   string `json:"key"`
+	Image string `json:"image"`
+	Thumb string `json:"thumb"`
+}
+
+type CaptchaReq struct {
+	Dots string `json:"dots"`
+	Key  string `json:"key"`
+}
+
+type CaptchaCompareResp struct {
+	Ok bool `json:"ok"`
+}
