@@ -1,0 +1,6 @@
+Name: login.rpc
+ListenOn: 0.0.0.0:6001
+Etcd:
+  Hosts:
+  - etcd:2379
+  Key: login.rpc

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "./pb";
+
+message loginReq {
+  string Mobile = 1;
+  string SmsCode = 2;
+}
+message loginResp {
+  string access_token = 1;
+  int64 access_expire = 2;
+  int64 refresh_after = 3;
+}
+message MiniAuthReq {
+  string Code = 1;
+}
+
+service LoginRpc {
+  rpc MiniLoginByMobile (loginReq) returns (loginResp);
+  rpc MiniLoginByAuth (MiniAuthReq) returns (loginResp);
+}

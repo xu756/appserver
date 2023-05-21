@@ -1,0 +1,27 @@
+type (
+	LoginByMobileReq {
+		Mobile  string `json:"mobile"`
+		SmsCode string `json:"smscode"`
+	}
+	LoginResp {
+		AccessToken  string `json:"access_token"`
+		AccessExpire int64  `json:"access_expire"`
+		RefreshAfter int64  `json:"refresh_after"`
+	}
+	MiniAuthReq {
+		Code string `path:"code"`
+	}
+)
+@server(
+	prefix: appserver/mini
+	middleware: MiniMidHandler
+)
+service mini-api {
+	@doc "手机号登录"
+	@handler LoginByMobile
+	post /login/mobile (LoginByMobileReq) returns (LoginResp)
+	
+	@doc "一键授权"
+	@handler MiniAuth
+	post /login/auth/:code (MiniAuthReq) returns (LoginResp)
+}
