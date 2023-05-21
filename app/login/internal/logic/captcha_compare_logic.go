@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-
 	"github.com/xu756/appserver/app/login/internal/svc"
 	"github.com/xu756/appserver/app/login/pb"
 
@@ -24,7 +23,6 @@ func NewCaptchaCompareLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ca
 }
 
 func (l *CaptchaCompareLogic) CaptchaCompare(in *pb.CaptchaCheckReq) (*pb.CaptchaCheckResp, error) {
-	// todo: add your logic here and delete this line
-
+	//captcha.CheckPointDistWithPadding()
 	return &pb.CaptchaCheckResp{}, nil
 }
