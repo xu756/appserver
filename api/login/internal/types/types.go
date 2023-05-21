@@ -22,10 +22,10 @@ type CaptchaResp struct {
 	Image string `json:"image"`
 	Thumb string `json:"thumb"`
 }
-
 type CaptchaReq struct {
-	Dots string `json:"dots"`
-	Key  string `json:"key"`
+	Dots []int64 `json:"dots"`
+
+	Key string `json:"key"`
 }
 
 type CaptchaCompareResp struct {

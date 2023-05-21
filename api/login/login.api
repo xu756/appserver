@@ -37,7 +37,7 @@ type (
 	}
 	// 验证码登录
 	CaptchaReq {
-		Dots string `json:"dots"`
+		Dots []int64 `json:"dots"`
 		Key  string `json:"key"`
 	}
 	//  验证码比对

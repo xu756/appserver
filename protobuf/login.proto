@@ -26,7 +26,7 @@ message CaptchaResp{
 }
 // 验证码比对
 message CaptchaCheckReq{
-  string dots = 1;
+  repeated int64 dots = 1; //  点击的坐标 x,y,x,y 4个点
   string key = 2;
 }
 message CaptchaCheckResp{
