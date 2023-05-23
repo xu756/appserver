@@ -4,13 +4,13 @@ package handler
 import (
 	"net/http"
 
-	"github.com/xu756/appserver/api/conn/imserver/internal/svc"
+	"github.com/xu756/appserver/api/conn/imserver/svc"
 )
 
 func RegisterHandlers(server *http.Server, serverCtx *svc.ServiceContext) {
 	// 设置路由、中间件、处理新连接的函数
 	mux := http.NewServeMux()
 
-	//mux.HandleFunc("/websocket", addConn(serverCtx))
+	//mux.HandleFunc("/appserver/api/websocket", addConn(serverCtx))
 	server.Handler = mux
 }
