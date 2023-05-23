@@ -9,7 +9,6 @@ import (
 	"github.com/xu756/appserver/api/conn/internal/server"
 	"github.com/xu756/appserver/api/conn/internal/svc"
 	"github.com/xu756/appserver/api/conn/pb"
-
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -24,7 +23,7 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
-	imserver.InitServer(c)
+	go imserver.InitServer(c)
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		pb.RegisterImServiceServer(grpcServer, server.NewImServiceServer(ctx))
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
@@ -33,6 +32,6 @@ func main() {
 	})
 	defer s.Stop()
 
-	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
+	fmt.Printf("【IM-Api】 远程调用 server at %s...\n", c.ListenOn)
 	s.Start()
 }

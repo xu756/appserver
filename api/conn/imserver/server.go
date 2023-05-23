@@ -24,7 +24,7 @@ func InitServer(c config.Config) {
 	}
 	handler.RegisterHandlers(&server, ctx)
 
-	fmt.Println("IM服务已启动：", c.ImConfig.Heartbeat)
+	fmt.Println("【IM-Api】Api at: 0.0.0.0", c.ImConfig.Port)
 	defer func(server *http.Server) {
 		if err := server.Close(); err != nil {
 			logx.Errorf("【IM-Api】程序退出，IM服务关闭失败 %v", err)
