@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/xu756/appserver/internal/xjwt"
 
 	"github.com/xu756/appserver/app/login/internal/svc"
 	"github.com/xu756/appserver/app/login/pb"
@@ -25,8 +26,16 @@ func NewMiniLoginByMobileLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *MiniLoginByMobileLogic) MiniLoginByMobile(in *pb.LoginReq) (*pb.LoginResp, error) {
 	var res = new(pb.LoginResp)
-	res.AccessExpire = 100
-	res.RefreshAfter = 100
-	res.AccessToken = "123456"
+	accessToken, err := l.svcCtx.Config.Jwt.IssueToken(&xjwt.AuthInfo{
+		ID:  uint64(123),
+		Job: "mini_user",
+	})
+	if err != nil {
+		logx.Error("【 login-rpc】生成jwt", err)
+		return nil, err
+	}
+	res.AccessExpire = l.svcCtx.Config.Jwt.GetExpire()
+	res.RefreshAfter = l.svcCtx.Config.Jwt.GetMaxRefresh()
+	res.AccessToken = accessToken
 	return res, nil
 }

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"fmt"
-	"github.com/xu756/appserver/api/conn/imserver/logic"
 	"github.com/xu756/appserver/api/conn/imserver/svc"
 	"github.com/xu756/appserver/internal/ctxdata"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -15,7 +14,7 @@ func addConn(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		tokenStr, err := svcCtx.Jwt.GetTokenFromHeader(r, "Authorization")
 		if err != nil {
 			logx.WithContext(r.Context()).Error("【中间件 middleware】 error:", err)
-			fmt.Print("middleware error:", err)
+			fmt.Print("【中间件 middleware】 error:", err)
 			return
 		}
 		jwtClaims, err := svcCtx.Jwt.ParserToken(tokenStr)
@@ -32,8 +31,8 @@ func addConn(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		ctx := ctxdata.NewContextForJwt(r.Context(), &jwtClaims.User)
 		r = r.WithContext(ctx)
-
-		l := logic.NewAddConnLogic(r.Context(), svcCtx)
-		err = l.AddConn(w, r)
+		fmt.Print("jwtClaims:", jwtClaims)
+		//l := logic.NewAddConnLogic(r.Context(), svcCtx)
+		//err = l.AddConn(w, r)
 	}
 }
