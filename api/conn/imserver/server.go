@@ -39,6 +39,7 @@ func InitServer(c config.Config) {
 		return
 	}
 	go imServer(ctx)
+	go logic.Hubs.Run()
 	logic.ImDefault = c.ImConfig.ImDefault
 	err = server.ListenAndServe()
 	if err != nil {
