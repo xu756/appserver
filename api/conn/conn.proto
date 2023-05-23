@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "./pb";
+
+message ImData{
+  string  ImId = 1;
+  bytes  ImData = 2;
+}
+message ImResp{
+  bool Ok = 1;
+}
+
+service ImService {
+  // 其他服务调用发送消息
+  rpc Send(ImData) returns (ImResp) {}
+  // 其他服务调用广播消息
+  rpc Broadcast(ImData) returns (ImResp) {}
+}

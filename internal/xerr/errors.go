@@ -33,15 +33,15 @@ func NewErrCode(errCode uint32) *CodeError {
 	return &CodeError{errCode: errCode, errMsg: GetErrDetail(errCode)}
 }
 
-func NewErrMsg(errMsg string) *CodeError {
-	return &CodeError{errCode: ServerCommonError, errMsg: errMsg}
-}
-
-// TypeConversionError 类型转换出现错误
-func TypeConversionError(err error) *CodeError {
-	fmt.Println("类型转换出现错误: ", err.Error())
-	return &CodeError{errCode: TypeConversionErr, errMsg: "类型转换出现错误: " + err.Error()}
-}
+//func NewErrMsg(errMsg string) *CodeError {
+//	return &CodeError{errCode: ServerCommonError, errMsg: errMsg}
+//}
+//
+//// TypeConversionError 类型转换出现错误
+//func TypeConversionError(err error) *CodeError {
+//	fmt.Println("类型转换出现错误: ", err.Error())
+//	return &CodeError{errCode: TypeConversionErr, errMsg: "类型转换出现错误: " + err.Error()}
+//}
 
 // DatabaseErr 数据库错误
 func DatabaseErr(err interface{}) *CodeError {
