@@ -9,14 +9,15 @@ import (
 )
 
 type Client struct {
-	mutex  sync.Mutex
-	imId   string
-	conn   *websocket.Conn
-	isOpen bool
-	ip     string
-	reader chan []byte
-	write  chan []byte
-	close  chan bool
+	mutex     sync.Mutex
+	imId      string
+	conn      *websocket.Conn
+	isOpen    bool
+	ip        string
+	reader    chan []byte
+	write     chan []byte
+	close     chan bool
+	closeOnce sync.Once
 }
 
 type ClientLogic struct {
@@ -41,15 +42,21 @@ func (l *ClientLogic) read() {
 			case <-l.client.close:
 				return
 			default:
-				_, message, err := l.client.conn.Read(context.TODO())
+				_, message, err := l.client.conn.Read(context.Background())
 				if err != nil {
+					l.closeClient()
 					return
 				}
-				l.client.write <- message
+				message, err = aESDecrypt(message)
+				if err != nil {
+					logx.Error("【解密失败】", err)
+					l.closeClient()
+					return
+				}
+				Hubs.Broadcast <- message
 			}
 		}
 	}()
-
 }
 
 func (l *ClientLogic) write() {
@@ -59,11 +66,24 @@ func (l *ClientLogic) write() {
 			case <-l.client.close:
 				return
 			case message := <-l.client.write:
-				err := l.client.conn.Write(context.Background(), websocket.MessageBinary, message)
+				err := l.client.conn.Write(context.Background(), websocket.MessageBinary, aESEncrypt(message))
 				if err != nil {
+					l.closeClient()
 					return
 				}
 			}
 		}
 	}()
+}
+
+func (l *ClientLogic) closeClient() {
+	l.client.closeOnce.Do(func() {
+		l.client.mutex.Lock()
+		defer l.client.mutex.Unlock()
+		if l.client.isOpen {
+			l.client.isOpen = false
+			close(l.client.close)
+			l.client.conn.Close(websocket.StatusNormalClosure, "Connection closed")
+		}
+	})
 }

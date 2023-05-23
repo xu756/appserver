@@ -1,12 +1,17 @@
 package logic
 
+import (
+	"sync"
+)
+
 var Hubs = NewHub()
 
 type Hub struct {
-	clients    map[*Client]bool
+	clients    sync.Map
 	Broadcast  chan []byte
 	register   chan *Client
 	unregister chan *Client
+	lock       sync.RWMutex
 }
 
 func NewHub() *Hub {
@@ -14,7 +19,6 @@ func NewHub() *Hub {
 		Broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
-		clients:    make(map[*Client]bool),
 	}
 }
 
@@ -22,21 +26,37 @@ func (h *Hub) Run() {
 	for {
 		select {
 		case client := <-h.register:
-			h.clients[client] = true
+			h.lock.Lock()
+			h.clients.Store(client.imId, client)
+			h.lock.Unlock()
 		case client := <-h.unregister:
-			if _, ok := h.clients[client]; ok {
-				delete(h.clients, client)
-				close(client.reader)
-			}
+			h.lock.Lock()
+			h.clients.Delete(client.imId)
+			client.close <- true // 关闭客户端
+			h.lock.Unlock()
 		case message := <-h.Broadcast:
-			for client := range h.clients {
+			h.clients.Range(func(_, value interface{}) bool {
+				client := value.(*Client)
 				select {
-				case client.reader <- message:
+				case client.write <- message:
 				default:
-					close(client.reader)
-					delete(h.clients, client)
+					h.lock.Lock()
+					client.close <- true
+					h.clients.Delete(client.imId)
+					h.lock.Unlock()
 				}
-			}
+				return true
+			})
 		}
 	}
+}
+
+func (h *Hub) FindOneByImId(imId string) *Client {
+	h.lock.RLock()
+	defer h.lock.RUnlock()
+	value, ok := h.clients.Load(imId)
+	if !ok {
+		return nil
+	}
+	return value.(*Client)
 }

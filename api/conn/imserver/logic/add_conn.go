@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"nhooyr.io/websocket"
 	"sync"
+	"time"
 )
 
 var Hostname string
@@ -45,18 +46,17 @@ func (l *AddConnLogic) AddConn(w http.ResponseWriter, r *http.Request, c *websoc
 	log.Print("ip:", ip)
 	clientLogic := NewClientLogic(l.ctx, l.svcCtx)
 	clientLogic.client = &Client{
-		imId:   "11",
+		imId:   time.Now().String(),
 		conn:   c,
 		isOpen: true,
 		ip:     "",
 		reader: make(chan []byte, 1024),
 		write:  make(chan []byte, 1024),
-		close:  make(chan bool),
+		close:  make(chan bool, 1),
 		mutex:  sync.Mutex{},
 	}
 	clientLogic.read()
 	clientLogic.write()
 	Hubs.register <- clientLogic.client
-
 	return nil
 }
