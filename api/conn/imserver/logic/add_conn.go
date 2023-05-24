@@ -49,9 +49,9 @@ func (l *AddConnLogic) AddConn(w http.ResponseWriter, r *http.Request, c *websoc
 		imId:   time.Now().String(),
 		conn:   c,
 		isOpen: true,
-		ip:     "",
-		reader: make(chan []byte, 1024),
-		write:  make(chan []byte, 1024),
+		ip:     ip,
+		reader: make(chan []byte, 10),
+		write:  make(chan []byte, 10),
 		close:  make(chan bool, 1),
 		mutex:  sync.Mutex{},
 	}
