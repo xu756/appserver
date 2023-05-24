@@ -27,7 +27,7 @@ func NewMiniLoginByMobileLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *MiniLoginByMobileLogic) MiniLoginByMobile(in *pb.LoginReq) (*pb.LoginResp, error) {
 	var res = new(pb.LoginResp)
-	if in.Mobile != "666666" {
+	if in.SmsCode != "666666" {
 		return nil, xerr.NewErrMsg("验证码错误")
 	}
 	user, err := l.svcCtx.UserModel.FindOneByMobile(l.ctx, in.Mobile)
