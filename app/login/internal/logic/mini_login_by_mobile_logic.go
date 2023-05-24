@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/xu756/appserver/internal/xerr"
 	"github.com/xu756/appserver/internal/xjwt"
 
 	"github.com/xu756/appserver/app/login/internal/svc"
@@ -26,8 +27,16 @@ func NewMiniLoginByMobileLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *MiniLoginByMobileLogic) MiniLoginByMobile(in *pb.LoginReq) (*pb.LoginResp, error) {
 	var res = new(pb.LoginResp)
+	if in.Mobile != "666666" {
+		return nil, xerr.NewErrMsg("验证码错误")
+	}
+	user, err := l.svcCtx.UserModel.FindOneByMobile(l.ctx, in.Mobile)
+	if err != nil {
+		return nil, err
+	}
+
 	accessToken, err := l.svcCtx.Config.Jwt.IssueToken(&xjwt.AuthInfo{
-		ID:     123,
+		ID:     uint64(user.Id),
 		Job:    "user",
 		Issuer: "mini",
 	})

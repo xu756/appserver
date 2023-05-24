@@ -9,6 +9,7 @@ Cache:
   - Host: redis:6379
     Pass: Y5dg5tg8050oigInC30sf
 
+DbSource: appserver:XVwp5gdAH4Ghjn7uf567@tcp(mysql:3306)/housekeep?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 
 RedisConf:
   Host: redis:6379

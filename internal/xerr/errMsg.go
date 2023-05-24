@@ -5,9 +5,6 @@ var message map[uint32]string
 func init() {
 	message = make(map[uint32]string)
 	message[OK] = "SUCCESS"
-	message[LoginError] = "登录失败"
-	message[DbError] = "数据库错误"
-
 }
 
 func GetErrDetail(errcode uint32) string {

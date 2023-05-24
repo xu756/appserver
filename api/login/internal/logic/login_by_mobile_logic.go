@@ -5,6 +5,7 @@ import (
 	"github.com/xu756/appserver/api/login/internal/svc"
 	"github.com/xu756/appserver/api/login/internal/types"
 	"github.com/xu756/appserver/app/login/loginrpc"
+	"github.com/xu756/appserver/internal/xerr"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,7 +28,7 @@ func (l *LoginByMobileLogic) LoginByMobile(req *types.LoginByMobileReq) (resp *t
 		SmsCode: req.SmsCode,
 	})
 	if err != nil {
-		return nil, err
+		return nil, xerr.StystenError(err)
 	}
 	return &types.LoginResp{
 		AccessToken:  res.AccessToken,

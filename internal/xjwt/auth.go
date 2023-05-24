@@ -11,12 +11,12 @@ import (
 )
 
 var (
-	ErrTokenExpired           = xerr.NewErrCodeMsg(401, "令牌已过期")
-	ErrTokenExpiredMaxRefresh = xerr.NewErrCodeMsg(401, "令牌已过最大刷新时间")
-	ErrTokenMalformed         = xerr.NewErrCodeMsg(401, "请求令牌格式有误")
-	ErrTokenInvalid           = xerr.NewErrCodeMsg(401, "请求令牌无效")
-	ErrHeaderEmpty            = xerr.NewErrCodeMsg(401, "需要认证才能访问！")
-	ErrHeaderMalformed        = xerr.NewErrCodeMsg(401, "请求头中 Authorization 格式有误")
+	ErrTokenExpired           = xerr.StystenError("令牌已过期")
+	ErrTokenExpiredMaxRefresh = xerr.StystenError("令牌已过最大刷新时间")
+	ErrTokenMalformed         = xerr.StystenError("请求令牌格式有误")
+	ErrTokenInvalid           = xerr.StystenError("请求令牌无效")
+	ErrHeaderEmpty            = xerr.StystenError("需要认证才能访问！")
+	ErrHeaderMalformed        = xerr.StystenError("请求头中 Authorization 格式有误")
 )
 
 type AuthInfo struct {
@@ -92,7 +92,7 @@ func (j *JWT) IssueToken(u *AuthInfo) (string, error) {
 	// 根据 claims 生成token对象
 	token, err := j.createToken(c)
 	if err != nil {
-		return "", xerr.NewErrCodeMsg(xerr.TokenExpireError, err.Error())
+		return "", xerr.StystenError(err.Error())
 	}
 
 	return token, nil

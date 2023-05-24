@@ -25,25 +25,16 @@ func (e *CodeError) Error() string {
 	return fmt.Sprintf("ErrCode:%d，ErrMsg:%s", e.errCode, e.errMsg)
 }
 
-func NewErrCodeMsg(errCode uint32, errMsg string) *CodeError {
-	return &CodeError{errCode: errCode, errMsg: errMsg}
-}
-
-func NewErrCode(errCode uint32) *CodeError {
-	return &CodeError{errCode: errCode, errMsg: GetErrDetail(errCode)}
-}
-
-func NewErrMsg(errMsg string) *CodeError {
-	return &CodeError{errCode: ServerCommonError, errMsg: errMsg}
-}
-
-// TypeConversionError 类型转换出现错误
-func TypeConversionError(err error) *CodeError {
-	fmt.Println("类型转换出现错误: ", err.Error())
-	return &CodeError{errCode: TypeConversionErr, errMsg: "类型转换出现错误: " + err.Error()}
+func StystenError(err interface{}) *CodeError {
+	return &CodeError{errCode: StystemEoore, errMsg: fmt.Sprintf("%v", err)}
 }
 
 // DatabaseErr 数据库错误
 func DatabaseErr(err interface{}) *CodeError {
 	return &CodeError{errCode: DbError, errMsg: fmt.Sprintf("%v", err)}
+}
+
+// NewErrMsg 自定义错误信息
+func NewErrMsg(errMsg string) *CodeError {
+	return &CodeError{errCode: ServerCommonError, errMsg: errMsg}
 }

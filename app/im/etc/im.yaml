@@ -2,7 +2,7 @@ Name: im.rpc
 ListenOn: 0.0.0.0:6002
 Etcd:
   Hosts:
-  - etcd:2379
+    - etcd:2379
   Key: im.rpc
 
 
@@ -16,3 +16,6 @@ RedisConf:
   Host: redis:6379
   Type: node
   Pass: Y5dg5tg8050oigInC30sf
+
+
+DbSource: appserver:XVwp5gdAH4Ghjn7uf567@tcp(mysql:3306)/housekeep?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
