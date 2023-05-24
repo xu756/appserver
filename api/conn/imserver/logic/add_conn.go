@@ -32,7 +32,7 @@ func NewAddConnLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddConnLo
 	}
 }
 
-func (l *AddConnLogic) AddConn(w http.ResponseWriter, r *http.Request, c *websocket.Conn) error {
+func (l *AddConnLogic) AddConn(w http.ResponseWriter, r *http.Request) error {
 	jwtUser, ok := ctxdata.FromContextForJwt(l.ctx)
 	if !ok {
 		l.Errorf("没有找到JWT参数")
@@ -44,6 +44,17 @@ func (l *AddConnLogic) AddConn(w http.ResponseWriter, r *http.Request, c *websoc
 		ip = exnet.ClientIP(r)
 	}
 	log.Print("ip:", ip)
+	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
+		Subprotocols:         nil,
+		InsecureSkipVerify:   false,
+		OriginPatterns:       nil,
+		CompressionMode:      0,
+		CompressionThreshold: 0,
+	})
+	if err != nil {
+		logx.WithContext(r.Context()).Error("【中间件 middleware】升级请求头 error:", err)
+		return xerr.NewErrMsg("【中间件 middleware】升级请求头 error:" + err.Error())
+	}
 	clientLogic := NewClientLogic(l.ctx, l.svcCtx)
 	clientLogic.client = &Client{
 		imId:   time.Now().String(),

@@ -6,7 +6,6 @@ import (
 	"github.com/xu756/appserver/internal/tool"
 	"github.com/xu756/appserver/internal/xerr"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -21,17 +20,21 @@ var (
 )
 
 type AuthInfo struct {
-	ID  uint64
-	Job string
+	ID     uint64
+	Job    string
+	Issuer string
 }
 
-func (a *AuthInfo) GetStringID() string {
-	return strconv.FormatUint(a.ID, 10)
+func (a *AuthInfo) GetStringID() uint64 {
+	return a.ID
 }
 
 // GetJob 这里会返回三种角色的字符串注解，普通用户就是 "user" ...
 func (a *AuthInfo) GetJob() string {
 	return a.Job
+}
+func (a *AuthInfo) GetIssuer() string {
+	return a.Issuer
 }
 
 type JWT struct {

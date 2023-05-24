@@ -82,7 +82,7 @@ func (l *ClientLogic) closeClient() {
 		defer l.client.mutex.Unlock()
 		if l.client.isOpen {
 			l.client.isOpen = false
-			close(l.client.close)
+			Hubs.unregister <- l.client
 			l.client.conn.Close(websocket.StatusNormalClosure, "Connection closed")
 		}
 	})

@@ -27,8 +27,9 @@ func NewMiniLoginByMobileLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 func (l *MiniLoginByMobileLogic) MiniLoginByMobile(in *pb.LoginReq) (*pb.LoginResp, error) {
 	var res = new(pb.LoginResp)
 	accessToken, err := l.svcCtx.Config.Jwt.IssueToken(&xjwt.AuthInfo{
-		ID:  uint64(123),
-		Job: "mini_user",
+		ID:     123,
+		Job:    "user",
+		Issuer: "mini",
 	})
 	if err != nil {
 		logx.Error("【 login-rpc】生成jwt", err)

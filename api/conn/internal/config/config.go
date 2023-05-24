@@ -17,4 +17,5 @@ type Config struct {
 	ImConfig  IMConfig `json:"ImConfig"`
 	RedisConf redis.RedisConf
 	Jwt       xjwt.JWT `json:"jwt"`
+	ImRpc     zrpc.RpcClientConf
 }

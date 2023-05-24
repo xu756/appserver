@@ -31,3 +31,9 @@ JWT:
   ProdExpireTime: 5000             #生产环境令牌过期时间
   Issuer: "conn.rpc"  #token颁发者
   Mode: "dev"            #当前模块的运行状态
+
+ImRpc:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    Key: im.rpc
