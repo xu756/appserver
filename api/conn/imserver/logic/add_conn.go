@@ -17,7 +17,6 @@ import (
 
 var Hostname string
 var Heartbeat int
-var ImDefault string
 
 type AddConnLogic struct {
 	logx.Logger

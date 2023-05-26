@@ -5,7 +5,6 @@ import (
 	"github.com/xu756/appserver/api/conn/imserver/logic"
 	"github.com/zeromicro/go-zero/core/logx"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
@@ -30,17 +29,15 @@ func InitServer(c config.Config) {
 			logx.Errorf("【IM-Api】程序退出，IM服务关闭失败 %v", err)
 		}
 	}(&server)
-	logic.Hostname, _ = os.Hostname()
-
+	logic.Hostname = c.Etcd.Key
 	logic.Heartbeat = c.ImConfig.Heartbeat
-	err := ctx.RedisClient.Setex("cache:im:server:"+logic.Hostname+logic.ImDefault, logic.Hostname+logic.ImDefault, 60)
+	err := ctx.RedisClient.Setex("cache:im:server:"+logic.Hostname, logic.Hostname, 60)
 	if err != nil {
 		logx.Errorf("【IM-Api】设置服务器失败 %v", err)
 		return
 	}
 	go imServer(ctx)
 	go logic.Hubs.Run()
-	logic.ImDefault = c.ImConfig.ImDefault
 	err = server.ListenAndServe()
 	if err != nil {
 		logx.Errorf("【IM-Api】服务停止 %v", err)
@@ -53,7 +50,7 @@ func imServer(svc *svc.ServiceContext) {
 	for {
 		select {
 		case <-ticker.C:
-			err := svc.RedisClient.Setex("cache:im:server:"+logic.Hostname+logic.ImDefault, logic.Hostname+logic.ImDefault, 60)
+			err := svc.RedisClient.Setex("cache:im:server:"+logic.Hostname, logic.Hostname, 60)
 			if err != nil {
 				logx.Errorf("【IM-Api】设置服务器失败 %v", err)
 				return

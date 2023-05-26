@@ -7,9 +7,8 @@ import (
 )
 
 type IMConfig struct {
-	Port      int    `json:"port"`
-	Heartbeat int    `json:"heartbeat"`
-	ImDefault string `json:"im_default"`
+	Port      int `json:"port"`
+	Heartbeat int `json:"heartbeat"`
 }
 
 type Config struct {

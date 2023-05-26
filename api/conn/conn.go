@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/xu756/appserver/api/conn/imserver"
+	"os"
 
 	"github.com/xu756/appserver/api/conn/internal/config"
 	"github.com/xu756/appserver/api/conn/internal/server"
@@ -22,6 +23,7 @@ func main() {
 	flag.Parse()
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
+	c.Etcd.Key, _ = os.Hostname()
 	ctx := svc.NewServiceContext(c)
 	go imserver.InitServer(c)
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
