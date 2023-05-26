@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"github.com/xu756/appserver/api/conn/imserver/svc"
+	"github.com/xu756/appserver/app/im/pb"
 	"github.com/zeromicro/go-zero/core/logx"
 	"nhooyr.io/websocket"
 	"sync"
@@ -83,7 +84,19 @@ func (l *ClientLogic) closeClient() {
 		if l.client.isOpen {
 			l.client.isOpen = false
 			Hubs.unregister <- l.client
+			l.svcCtx.ImRpc.Meta(context.Background(), &pb.ImMeta{
+				DetailType: "disconnect",
+				ImId:       l.client.imId,
+				LoginId:    0,
+				Job:        "",
+				Ip:         "",
+				Issue:      "",
+				Version:    "",
+				ImServer:   "",
+				Data:       nil,
+			})
 			l.client.conn.Close(websocket.StatusNormalClosure, "Connection closed")
+
 		}
 	})
 }

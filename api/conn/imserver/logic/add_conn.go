@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/thinkeridea/go-extend/exnet"
 	"github.com/xu756/appserver/api/conn/imserver/svc"
 	"github.com/xu756/appserver/app/im/imrpc"
@@ -12,7 +13,6 @@ import (
 	"net/http"
 	"nhooyr.io/websocket"
 	"sync"
-	"time"
 )
 
 var Hostname string
@@ -56,8 +56,12 @@ func (l *AddConnLogic) AddConn(w http.ResponseWriter, r *http.Request) error {
 		return xerr.MsgError("【中间件 middleware】升级请求头 error:" + err.Error())
 	}
 	clientLogic := NewClientLogic(l.ctx, l.svcCtx)
+	imId, err := uuid.NewUUID()
+	if err != nil {
+		return xerr.MsgError("【生成uid错误】" + err.Error())
+	}
 	clientLogic.client = &Client{
-		imId:   time.Now().String(),
+		imId:   imId.String(),
 		conn:   c,
 		isOpen: true,
 		ip:     ip,

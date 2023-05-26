@@ -23,7 +23,7 @@ func NewGetImDataLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetImDa
 	}
 }
 
-// 服务端主动推送
+// GetImData 服务端主动推送
 func (l *GetImDataLogic) GetImData(in *pb.ImData) (*pb.ImResp, error) {
 	// todo: add your logic here and delete this line
 

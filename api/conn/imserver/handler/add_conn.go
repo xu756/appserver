@@ -6,7 +6,6 @@ import (
 	"github.com/xu756/appserver/api/conn/imserver/svc"
 	"github.com/xu756/appserver/internal/ctxdata"
 	"github.com/zeromicro/go-zero/core/logx"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -33,7 +32,6 @@ func addConn(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		ctx := ctxdata.NewContextForJwt(r.Context(), &jwtClaims.User)
 		r = r.WithContext(ctx)
-		log.Print("user:", jwtClaims.User)
 		l := logic.NewAddConnLogic(r.Context(), svcCtx)
 		err = l.AddConn(w, r)
 		if err != nil {
