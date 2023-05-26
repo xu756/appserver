@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		pb.RegisterImLoginServer(grpcServer, server.NewImLoginServer(ctx))
+		pb.RegisterImRpcServer(grpcServer, server.NewImRpcServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
@@ -34,6 +34,6 @@ func main() {
 	})
 	defer s.Stop()
 
-	fmt.Printf("【启动Im Rpc】 at %s...\n", c.ListenOn)
+	fmt.Printf("【ImRpc 服务】at %s...\n", c.ListenOn)
 	s.Start()
 }

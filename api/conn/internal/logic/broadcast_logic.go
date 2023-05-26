@@ -24,8 +24,8 @@ func NewBroadcastLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Broadca
 }
 
 // Broadcast 其他服务调用广播消息
-func (l *BroadcastLogic) Broadcast(in *pb.ImData) (*pb.ImResp, error) {
+func (l *BroadcastLogic) Broadcast(in *pb.WsData) (*pb.WsResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &pb.ImResp{}, nil
+	return &pb.WsResp{}, nil
 }

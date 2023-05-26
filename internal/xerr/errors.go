@@ -29,12 +29,16 @@ func StystenError(err interface{}) *CodeError {
 	return &CodeError{errCode: StystemEoore, errMsg: fmt.Sprintf("%v", err)}
 }
 
-// DatabaseErr 数据库错误
-func DatabaseErr(err interface{}) *CodeError {
+// DbErr 数据库错误
+func DbErr(err interface{}) *CodeError {
 	return &CodeError{errCode: DbError, errMsg: fmt.Sprintf("%v", err)}
 }
 
-// NewErrMsg 自定义错误信息
-func NewErrMsg(errMsg string) *CodeError {
-	return &CodeError{errCode: ServerCommonError, errMsg: errMsg}
+func MsgError(msg string) *CodeError {
+	return &CodeError{errCode: MsError, errMsg: msg}
+}
+
+func LogOut(err interface{}) *CodeError {
+	return &CodeError{errCode: LogOutError, errMsg: fmt.Sprintf("%v", err)}
+
 }

@@ -18,126 +18,126 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// ImLoginClient is the client API for ImLogin service.
+// ImRpcClient is the client API for ImRpc service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ImLoginClient interface {
+type ImRpcClient interface {
 	// 元事件 连接 断开 状态更新 解密错误
 	Meta(ctx context.Context, in *ImMeta, opts ...grpc.CallOption) (*ImResp, error)
 	// 服务端主动推送
 	GetImData(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error)
 }
 
-type imLoginClient struct {
+type imRpcClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewImLoginClient(cc grpc.ClientConnInterface) ImLoginClient {
-	return &imLoginClient{cc}
+func NewImRpcClient(cc grpc.ClientConnInterface) ImRpcClient {
+	return &imRpcClient{cc}
 }
 
-func (c *imLoginClient) Meta(ctx context.Context, in *ImMeta, opts ...grpc.CallOption) (*ImResp, error) {
+func (c *imRpcClient) Meta(ctx context.Context, in *ImMeta, opts ...grpc.CallOption) (*ImResp, error) {
 	out := new(ImResp)
-	err := c.cc.Invoke(ctx, "/pb.ImLogin/Meta", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.ImRpc/Meta", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *imLoginClient) GetImData(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error) {
+func (c *imRpcClient) GetImData(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error) {
 	out := new(ImResp)
-	err := c.cc.Invoke(ctx, "/pb.ImLogin/GetImData", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.ImRpc/GetImData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ImLoginServer is the server API for ImLogin service.
-// All implementations must embed UnimplementedImLoginServer
+// ImRpcServer is the server API for ImRpc service.
+// All implementations must embed UnimplementedImRpcServer
 // for forward compatibility
-type ImLoginServer interface {
+type ImRpcServer interface {
 	// 元事件 连接 断开 状态更新 解密错误
 	Meta(context.Context, *ImMeta) (*ImResp, error)
 	// 服务端主动推送
 	GetImData(context.Context, *ImData) (*ImResp, error)
-	mustEmbedUnimplementedImLoginServer()
+	mustEmbedUnimplementedImRpcServer()
 }
 
-// UnimplementedImLoginServer must be embedded to have forward compatible implementations.
-type UnimplementedImLoginServer struct {
+// UnimplementedImRpcServer must be embedded to have forward compatible implementations.
+type UnimplementedImRpcServer struct {
 }
 
-func (UnimplementedImLoginServer) Meta(context.Context, *ImMeta) (*ImResp, error) {
+func (UnimplementedImRpcServer) Meta(context.Context, *ImMeta) (*ImResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Meta not implemented")
 }
-func (UnimplementedImLoginServer) GetImData(context.Context, *ImData) (*ImResp, error) {
+func (UnimplementedImRpcServer) GetImData(context.Context, *ImData) (*ImResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetImData not implemented")
 }
-func (UnimplementedImLoginServer) mustEmbedUnimplementedImLoginServer() {}
+func (UnimplementedImRpcServer) mustEmbedUnimplementedImRpcServer() {}
 
-// UnsafeImLoginServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ImLoginServer will
+// UnsafeImRpcServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ImRpcServer will
 // result in compilation errors.
-type UnsafeImLoginServer interface {
-	mustEmbedUnimplementedImLoginServer()
+type UnsafeImRpcServer interface {
+	mustEmbedUnimplementedImRpcServer()
 }
 
-func RegisterImLoginServer(s grpc.ServiceRegistrar, srv ImLoginServer) {
-	s.RegisterService(&ImLogin_ServiceDesc, srv)
+func RegisterImRpcServer(s grpc.ServiceRegistrar, srv ImRpcServer) {
+	s.RegisterService(&ImRpc_ServiceDesc, srv)
 }
 
-func _ImLogin_Meta_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ImRpc_Meta_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ImMeta)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ImLoginServer).Meta(ctx, in)
+		return srv.(ImRpcServer).Meta(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.ImLogin/Meta",
+		FullMethod: "/pb.ImRpc/Meta",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ImLoginServer).Meta(ctx, req.(*ImMeta))
+		return srv.(ImRpcServer).Meta(ctx, req.(*ImMeta))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ImLogin_GetImData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ImRpc_GetImData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ImData)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ImLoginServer).GetImData(ctx, in)
+		return srv.(ImRpcServer).GetImData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.ImLogin/GetImData",
+		FullMethod: "/pb.ImRpc/GetImData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ImLoginServer).GetImData(ctx, req.(*ImData))
+		return srv.(ImRpcServer).GetImData(ctx, req.(*ImData))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// ImLogin_ServiceDesc is the grpc.ServiceDesc for ImLogin service.
+// ImRpc_ServiceDesc is the grpc.ServiceDesc for ImRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ImLogin_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "pb.ImLogin",
-	HandlerType: (*ImLoginServer)(nil),
+var ImRpc_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "pb.ImRpc",
+	HandlerType: (*ImRpcServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Meta",
-			Handler:    _ImLogin_Meta_Handler,
+			Handler:    _ImRpc_Meta_Handler,
 		},
 		{
 			MethodName: "GetImData",
-			Handler:    _ImLogin_GetImData_Handler,
+			Handler:    _ImRpc_GetImData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

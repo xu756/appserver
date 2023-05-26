@@ -23,9 +23,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ImServiceClient interface {
 	// 其他服务调用发送消息
-	Send(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error)
+	Send(ctx context.Context, in *WsData, opts ...grpc.CallOption) (*WsResp, error)
 	// 其他服务调用广播消息
-	Broadcast(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error)
+	Broadcast(ctx context.Context, in *WsData, opts ...grpc.CallOption) (*WsResp, error)
 }
 
 type imServiceClient struct {
@@ -36,8 +36,8 @@ func NewImServiceClient(cc grpc.ClientConnInterface) ImServiceClient {
 	return &imServiceClient{cc}
 }
 
-func (c *imServiceClient) Send(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error) {
-	out := new(ImResp)
+func (c *imServiceClient) Send(ctx context.Context, in *WsData, opts ...grpc.CallOption) (*WsResp, error) {
+	out := new(WsResp)
 	err := c.cc.Invoke(ctx, "/pb.ImService/Send", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -45,8 +45,8 @@ func (c *imServiceClient) Send(ctx context.Context, in *ImData, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *imServiceClient) Broadcast(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error) {
-	out := new(ImResp)
+func (c *imServiceClient) Broadcast(ctx context.Context, in *WsData, opts ...grpc.CallOption) (*WsResp, error) {
+	out := new(WsResp)
 	err := c.cc.Invoke(ctx, "/pb.ImService/Broadcast", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -59,9 +59,9 @@ func (c *imServiceClient) Broadcast(ctx context.Context, in *ImData, opts ...grp
 // for forward compatibility
 type ImServiceServer interface {
 	// 其他服务调用发送消息
-	Send(context.Context, *ImData) (*ImResp, error)
+	Send(context.Context, *WsData) (*WsResp, error)
 	// 其他服务调用广播消息
-	Broadcast(context.Context, *ImData) (*ImResp, error)
+	Broadcast(context.Context, *WsData) (*WsResp, error)
 	mustEmbedUnimplementedImServiceServer()
 }
 
@@ -69,10 +69,10 @@ type ImServiceServer interface {
 type UnimplementedImServiceServer struct {
 }
 
-func (UnimplementedImServiceServer) Send(context.Context, *ImData) (*ImResp, error) {
+func (UnimplementedImServiceServer) Send(context.Context, *WsData) (*WsResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
 }
-func (UnimplementedImServiceServer) Broadcast(context.Context, *ImData) (*ImResp, error) {
+func (UnimplementedImServiceServer) Broadcast(context.Context, *WsData) (*WsResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Broadcast not implemented")
 }
 func (UnimplementedImServiceServer) mustEmbedUnimplementedImServiceServer() {}
@@ -89,7 +89,7 @@ func RegisterImServiceServer(s grpc.ServiceRegistrar, srv ImServiceServer) {
 }
 
 func _ImService_Send_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ImData)
+	in := new(WsData)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -101,13 +101,13 @@ func _ImService_Send_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/pb.ImService/Send",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ImServiceServer).Send(ctx, req.(*ImData))
+		return srv.(ImServiceServer).Send(ctx, req.(*WsData))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ImService_Broadcast_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ImData)
+	in := new(WsData)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -119,7 +119,7 @@ func _ImService_Broadcast_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/pb.ImService/Broadcast",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ImServiceServer).Broadcast(ctx, req.(*ImData))
+		return srv.(ImServiceServer).Broadcast(ctx, req.(*WsData))
 	}
 	return interceptor(ctx, in, info, handler)
 }

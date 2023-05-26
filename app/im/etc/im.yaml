@@ -19,3 +19,11 @@ RedisConf:
 
 
 DbSource: appserver:XVwp5gdAH4Ghjn7uf567@tcp(mysql:3306)/housekeep?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+
+
+ConnRpc:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    Key: conn.rpc

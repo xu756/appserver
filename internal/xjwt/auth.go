@@ -11,12 +11,12 @@ import (
 )
 
 var (
-	ErrTokenExpired           = xerr.StystenError("令牌已过期")
-	ErrTokenExpiredMaxRefresh = xerr.StystenError("令牌已过最大刷新时间")
-	ErrTokenMalformed         = xerr.StystenError("请求令牌格式有误")
-	ErrTokenInvalid           = xerr.StystenError("请求令牌无效")
-	ErrHeaderEmpty            = xerr.StystenError("需要认证才能访问！")
-	ErrHeaderMalformed        = xerr.StystenError("请求头中 Authorization 格式有误")
+	ErrTokenExpired           = xerr.MsgError("令牌已过期")
+	ErrTokenExpiredMaxRefresh = xerr.MsgError("令牌已过最大刷新时间")
+	ErrTokenMalformed         = xerr.MsgError("请求令牌格式有误")
+	ErrTokenInvalid           = xerr.MsgError("请求令牌无效")
+	ErrHeaderEmpty            = xerr.MsgError("需要认证才能访问！")
+	ErrHeaderMalformed        = xerr.MsgError("请求头中 Authorization 格式有误")
 )
 
 type AuthInfo struct {
@@ -92,7 +92,7 @@ func (j *JWT) IssueToken(u *AuthInfo) (string, error) {
 	// 根据 claims 生成token对象
 	token, err := j.createToken(c)
 	if err != nil {
-		return "", xerr.StystenError(err.Error())
+		return "", xerr.LogOut(err.Error())
 	}
 
 	return token, nil
@@ -130,7 +130,7 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 		validationErr, ok := err.(*jwt.ValidationError)
 		// 满足 refresh 的条件：只是单一的报错 ValidationErrorExpired
 		if !ok || validationErr.Errors != jwt.ValidationErrorExpired {
-			return "", err
+			return "", xerr.LogOut("令牌无效")
 		}
 	}
 

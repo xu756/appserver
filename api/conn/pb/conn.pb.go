@@ -20,7 +20,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type ImData struct {
+type WsData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -29,8 +29,8 @@ type ImData struct {
 	ImData []byte `protobuf:"bytes,2,opt,name=ImData,proto3" json:"ImData,omitempty"`
 }
 
-func (x *ImData) Reset() {
-	*x = ImData{}
+func (x *WsData) Reset() {
+	*x = WsData{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_conn_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -38,13 +38,13 @@ func (x *ImData) Reset() {
 	}
 }
 
-func (x *ImData) String() string {
+func (x *WsData) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ImData) ProtoMessage() {}
+func (*WsData) ProtoMessage() {}
 
-func (x *ImData) ProtoReflect() protoreflect.Message {
+func (x *WsData) ProtoReflect() protoreflect.Message {
 	mi := &file_conn_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -56,26 +56,26 @@ func (x *ImData) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ImData.ProtoReflect.Descriptor instead.
-func (*ImData) Descriptor() ([]byte, []int) {
+// Deprecated: Use WsData.ProtoReflect.Descriptor instead.
+func (*WsData) Descriptor() ([]byte, []int) {
 	return file_conn_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ImData) GetImId() string {
+func (x *WsData) GetImId() string {
 	if x != nil {
 		return x.ImId
 	}
 	return ""
 }
 
-func (x *ImData) GetImData() []byte {
+func (x *WsData) GetImData() []byte {
 	if x != nil {
 		return x.ImData
 	}
 	return nil
 }
 
-type ImResp struct {
+type WsResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -83,8 +83,8 @@ type ImResp struct {
 	Ok bool `protobuf:"varint,1,opt,name=Ok,proto3" json:"Ok,omitempty"`
 }
 
-func (x *ImResp) Reset() {
-	*x = ImResp{}
+func (x *WsResp) Reset() {
+	*x = WsResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_conn_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -92,13 +92,13 @@ func (x *ImResp) Reset() {
 	}
 }
 
-func (x *ImResp) String() string {
+func (x *WsResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ImResp) ProtoMessage() {}
+func (*WsResp) ProtoMessage() {}
 
-func (x *ImResp) ProtoReflect() protoreflect.Message {
+func (x *WsResp) ProtoReflect() protoreflect.Message {
 	mi := &file_conn_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -110,12 +110,12 @@ func (x *ImResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ImResp.ProtoReflect.Descriptor instead.
-func (*ImResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use WsResp.ProtoReflect.Descriptor instead.
+func (*WsResp) Descriptor() ([]byte, []int) {
 	return file_conn_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ImResp) GetOk() bool {
+func (x *WsResp) GetOk() bool {
 	if x != nil {
 		return x.Ok
 	}
@@ -126,16 +126,16 @@ var File_conn_proto protoreflect.FileDescriptor
 
 var file_conn_proto_rawDesc = []byte{
 	0x0a, 0x0a, 0x63, 0x6f, 0x6e, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x02, 0x70, 0x62,
-	0x22, 0x34, 0x0a, 0x06, 0x49, 0x6d, 0x44, 0x61, 0x74, 0x61, 0x12, 0x12, 0x0a, 0x04, 0x49, 0x6d,
+	0x22, 0x34, 0x0a, 0x06, 0x57, 0x73, 0x44, 0x61, 0x74, 0x61, 0x12, 0x12, 0x0a, 0x04, 0x49, 0x6d,
 	0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x49, 0x6d, 0x49, 0x64, 0x12, 0x16,
 	0x0a, 0x06, 0x49, 0x6d, 0x44, 0x61, 0x74, 0x61, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x06,
-	0x49, 0x6d, 0x44, 0x61, 0x74, 0x61, 0x22, 0x18, 0x0a, 0x06, 0x49, 0x6d, 0x52, 0x65, 0x73, 0x70,
+	0x49, 0x6d, 0x44, 0x61, 0x74, 0x61, 0x22, 0x18, 0x0a, 0x06, 0x57, 0x73, 0x52, 0x65, 0x73, 0x70,
 	0x12, 0x0e, 0x0a, 0x02, 0x4f, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x02, 0x4f, 0x6b,
 	0x32, 0x54, 0x0a, 0x09, 0x49, 0x6d, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x20, 0x0a,
-	0x04, 0x53, 0x65, 0x6e, 0x64, 0x12, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x49, 0x6d, 0x44, 0x61, 0x74,
-	0x61, 0x1a, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x49, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12,
+	0x04, 0x53, 0x65, 0x6e, 0x64, 0x12, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x57, 0x73, 0x44, 0x61, 0x74,
+	0x61, 0x1a, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x57, 0x73, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12,
 	0x25, 0x0a, 0x09, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x12, 0x0a, 0x2e, 0x70,
-	0x62, 0x2e, 0x49, 0x6d, 0x44, 0x61, 0x74, 0x61, 0x1a, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x49, 0x6d,
+	0x62, 0x2e, 0x57, 0x73, 0x44, 0x61, 0x74, 0x61, 0x1a, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x57, 0x73,
 	0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x2f, 0x70, 0x62, 0x62, 0x06,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
@@ -154,14 +154,14 @@ func file_conn_proto_rawDescGZIP() []byte {
 
 var file_conn_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_conn_proto_goTypes = []interface{}{
-	(*ImData)(nil), // 0: pb.ImData
-	(*ImResp)(nil), // 1: pb.ImResp
+	(*WsData)(nil), // 0: pb.WsData
+	(*WsResp)(nil), // 1: pb.WsResp
 }
 var file_conn_proto_depIdxs = []int32{
-	0, // 0: pb.ImService.Send:input_type -> pb.ImData
-	0, // 1: pb.ImService.Broadcast:input_type -> pb.ImData
-	1, // 2: pb.ImService.Send:output_type -> pb.ImResp
-	1, // 3: pb.ImService.Broadcast:output_type -> pb.ImResp
+	0, // 0: pb.ImService.Send:input_type -> pb.WsData
+	0, // 1: pb.ImService.Broadcast:input_type -> pb.WsData
+	1, // 2: pb.ImService.Send:output_type -> pb.WsResp
+	1, // 3: pb.ImService.Broadcast:output_type -> pb.WsResp
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -176,7 +176,7 @@ func file_conn_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_conn_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ImData); i {
+			switch v := v.(*WsData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -188,7 +188,7 @@ func file_conn_proto_init() {
 			}
 		}
 		file_conn_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ImResp); i {
+			switch v := v.(*WsResp); i {
 			case 0:
 				return &v.state
 			case 1:

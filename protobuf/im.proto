@@ -7,11 +7,12 @@ message ImMeta{
   string DetailType = 1;//元事件 连接 断开 状态更新 解密错误
   string  ImId = 2; //连接ID
   uint64 LoginId = 3; //登录ID
-  string Ip = 4; //IP
-  string Issue = 5; //设备 谁颁布的jwt
-  string Version = 6; //版本
-  string ImServer = 7; //连接的服务器
-  bytes Data = 8; //数据
+  string Job = 4; //职位
+  string Ip = 5; //IP
+  string Issue = 6; //设备 谁颁布的jwt
+  string Version = 7; //版本
+  string ImServer = 8; //连接的服务器
+  bytes Data = 9; //数据
 }
 
 message ImData{
@@ -23,7 +24,7 @@ message ImResp{
   bool Ok = 1;
 }
 
-service ImLogin{
+service ImRpc{
   //元事件 连接 断开 状态更新 解密错误
   rpc Meta(ImMeta) returns (ImResp);
   // 服务端主动推送

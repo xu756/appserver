@@ -11,25 +11,25 @@ import (
 	"github.com/xu756/appserver/app/im/pb"
 )
 
-type ImLoginServer struct {
+type ImRpcServer struct {
 	svcCtx *svc.ServiceContext
-	pb.UnimplementedImLoginServer
+	pb.UnimplementedImRpcServer
 }
 
-func NewImLoginServer(svcCtx *svc.ServiceContext) *ImLoginServer {
-	return &ImLoginServer{
+func NewImRpcServer(svcCtx *svc.ServiceContext) *ImRpcServer {
+	return &ImRpcServer{
 		svcCtx: svcCtx,
 	}
 }
 
 // 元事件 连接 断开 状态更新 解密错误
-func (s *ImLoginServer) Meta(ctx context.Context, in *pb.ImMeta) (*pb.ImResp, error) {
+func (s *ImRpcServer) Meta(ctx context.Context, in *pb.ImMeta) (*pb.ImResp, error) {
 	l := logic.NewMetaLogic(ctx, s.svcCtx)
 	return l.Meta(in)
 }
 
 // 服务端主动推送
-func (s *ImLoginServer) GetImData(ctx context.Context, in *pb.ImData) (*pb.ImResp, error) {
+func (s *ImRpcServer) GetImData(ctx context.Context, in *pb.ImData) (*pb.ImResp, error) {
 	l := logic.NewGetImDataLogic(ctx, s.svcCtx)
 	return l.GetImData(in)
 }

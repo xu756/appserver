@@ -23,13 +23,13 @@ func NewImServiceServer(svcCtx *svc.ServiceContext) *ImServiceServer {
 }
 
 // 其他服务调用发送消息
-func (s *ImServiceServer) Send(ctx context.Context, in *pb.ImData) (*pb.ImResp, error) {
+func (s *ImServiceServer) Send(ctx context.Context, in *pb.WsData) (*pb.WsResp, error) {
 	l := logic.NewSendLogic(ctx, s.svcCtx)
 	return l.Send(in)
 }
 
 // 其他服务调用广播消息
-func (s *ImServiceServer) Broadcast(ctx context.Context, in *pb.ImData) (*pb.ImResp, error) {
+func (s *ImServiceServer) Broadcast(ctx context.Context, in *pb.WsData) (*pb.WsResp, error) {
 	l := logic.NewBroadcastLogic(ctx, s.svcCtx)
 	return l.Broadcast(in)
 }

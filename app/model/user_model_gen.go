@@ -18,8 +18,8 @@ import (
 var (
 	userFieldNames          = builder.RawFieldNames(&User{})
 	userRows                = strings.Join(userFieldNames, ",")
-	userRowsExpectAutoSet   = strings.Join(stringx.Remove(userFieldNames, "`id`", "`update_time`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`"), ",")
-	userRowsWithPlaceHolder = strings.Join(stringx.Remove(userFieldNames, "`id`", "`update_time`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`"), "=?,") + "=?"
+	userRowsExpectAutoSet   = strings.Join(stringx.Remove(userFieldNames, "`id`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`"), ",")
+	userRowsWithPlaceHolder = strings.Join(stringx.Remove(userFieldNames, "`id`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`"), "=?,") + "=?"
 
 	cacheUserIdPrefix     = "cache:user:id:"
 	cacheUserMobilePrefix = "cache:user:mobile:"
@@ -42,17 +42,18 @@ type (
 	}
 
 	User struct {
-		Id        int64         `db:"id"`         // 主键
-		CreatedAt int64         `db:"created_at"` // 创建时间
-		UpdatedAt sql.NullInt64 `db:"updated_at"` // 更新时间
-		DeletedAt sql.NullInt64 `db:"deleted_at"` // 删除时间
-		Username  string        `db:"username"`   // 用户名
-		Password  string        `db:"password"`   // 密码
-		Mobile    string        `db:"mobile"`     // 手机号
-		Avatar    string        `db:"avatar"`     // 头像
-		Role      int64         `db:"role"`       // 角色
-		Status    int64         `db:"status"`     // 状态
-		OpenId    string        `db:"open_id"`    // 用户唯一标志
+		Id          int64  `db:"id"`           // 主键
+		CreatedTime int64  `db:"created_time"` // 创建时间
+		UpdatedTime int64  `db:"updated_time"` // 更新时间
+		DeleteTime  int64  `db:"delete_time"`  // 删除时间
+		DelStale    int64  `db:"del_stale"`    // 删除状态
+		Username    string `db:"username"`     // 用户名
+		Password    string `db:"password"`     // 密码
+		Mobile      string `db:"mobile"`       // 手机号
+		Avatar      string `db:"avatar"`       // 头像
+		Role        int64  `db:"role"`         // 角色
+		Status      int64  `db:"status"`       // 状态
+		OpenId      string `db:"open_id"`      // 用户唯一标志
 	}
 )
 
@@ -141,8 +142,8 @@ func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, 
 	userMobileKey := fmt.Sprintf("%s%v", cacheUserMobilePrefix, data.Mobile)
 	userOpenIdKey := fmt.Sprintf("%s%v", cacheUserOpenIdPrefix, data.OpenId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DeletedAt, data.Username, data.Password, data.Mobile, data.Avatar, data.Role, data.Status, data.OpenId)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.CreatedTime, data.UpdatedTime, data.DeleteTime, data.DelStale, data.Username, data.Password, data.Mobile, data.Avatar, data.Role, data.Status, data.OpenId)
 	}, userIdKey, userMobileKey, userOpenIdKey)
 	return ret, err
 }
@@ -158,7 +159,7 @@ func (m *defaultUserModel) Update(ctx context.Context, newData *User) error {
 	userOpenIdKey := fmt.Sprintf("%s%v", cacheUserOpenIdPrefix, data.OpenId)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.DeletedAt, newData.Username, newData.Password, newData.Mobile, newData.Avatar, newData.Role, newData.Status, newData.OpenId, newData.Id)
+		return conn.ExecCtx(ctx, query, newData.CreatedTime, newData.UpdatedTime, newData.DeleteTime, newData.DelStale, newData.Username, newData.Password, newData.Mobile, newData.Avatar, newData.Role, newData.Status, newData.OpenId, newData.Id)
 	}, userIdKey, userMobileKey, userOpenIdKey)
 	return err
 }

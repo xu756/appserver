@@ -13,14 +13,14 @@ import (
 )
 
 type (
-	ImData = pb.ImData
-	ImResp = pb.ImResp
+	WsData = pb.WsData
+	WsResp = pb.WsResp
 
 	ImService interface {
 		// 其他服务调用发送消息
-		Send(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error)
+		Send(ctx context.Context, in *WsData, opts ...grpc.CallOption) (*WsResp, error)
 		// 其他服务调用广播消息
-		Broadcast(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error)
+		Broadcast(ctx context.Context, in *WsData, opts ...grpc.CallOption) (*WsResp, error)
 	}
 
 	defaultImService struct {
@@ -35,13 +35,13 @@ func NewImService(cli zrpc.Client) ImService {
 }
 
 // 其他服务调用发送消息
-func (m *defaultImService) Send(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error) {
+func (m *defaultImService) Send(ctx context.Context, in *WsData, opts ...grpc.CallOption) (*WsResp, error) {
 	client := pb.NewImServiceClient(m.cli.Conn())
 	return client.Send(ctx, in, opts...)
 }
 
 // 其他服务调用广播消息
-func (m *defaultImService) Broadcast(ctx context.Context, in *ImData, opts ...grpc.CallOption) (*ImResp, error) {
+func (m *defaultImService) Broadcast(ctx context.Context, in *WsData, opts ...grpc.CallOption) (*WsResp, error) {
 	client := pb.NewImServiceClient(m.cli.Conn())
 	return client.Broadcast(ctx, in, opts...)
 }

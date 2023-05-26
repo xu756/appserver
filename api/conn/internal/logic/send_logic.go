@@ -24,8 +24,8 @@ func NewSendLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SendLogic {
 }
 
 // Send 其他服务调用发送消息
-func (l *SendLogic) Send(in *pb.ImData) (*pb.ImResp, error) {
+func (l *SendLogic) Send(in *pb.WsData) (*pb.WsResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &pb.ImResp{}, nil
+	return &pb.WsResp{}, nil
 }
