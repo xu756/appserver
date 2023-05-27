@@ -34,10 +34,15 @@ func (s *LoginRpcServer) MiniLoginByAuth(ctx context.Context, in *pb.MiniAuthReq
 
 func (s *LoginRpcServer) GetCaptcha(ctx context.Context, in *pb.Empty) (*pb.CaptchaResp, error) {
 	l := logic.NewGetCaptchaLogic(ctx, s.svcCtx)
-	return l.GetCaptcha()
+	return l.GetCaptcha(in)
 }
 
 func (s *LoginRpcServer) CaptchaCompare(ctx context.Context, in *pb.CaptchaCheckReq) (*pb.CaptchaCheckResp, error) {
 	l := logic.NewCaptchaCompareLogic(ctx, s.svcCtx)
 	return l.CaptchaCompare(in)
+}
+
+func (s *LoginRpcServer) PasswordLogin(ctx context.Context, in *pb.PasswordLoginReq) (*pb.LoginResp, error) {
+	l := logic.NewPasswordLoginLogic(ctx, s.svcCtx)
+	return l.PasswordLogin(in)
 }

@@ -26,6 +26,7 @@ type LoginRpcClient interface {
 	MiniLoginByAuth(ctx context.Context, in *MiniAuthReq, opts ...grpc.CallOption) (*LoginResp, error)
 	GetCaptcha(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CaptchaResp, error)
 	CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error)
+	PasswordLogin(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 }
 
 type loginRpcClient struct {
@@ -72,6 +73,15 @@ func (c *loginRpcClient) CaptchaCompare(ctx context.Context, in *CaptchaCheckReq
 	return out, nil
 }
 
+func (c *loginRpcClient) PasswordLogin(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
+	out := new(LoginResp)
+	err := c.cc.Invoke(ctx, "/pb.LoginRpc/PasswordLogin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LoginRpcServer is the server API for LoginRpc service.
 // All implementations must embed UnimplementedLoginRpcServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type LoginRpcServer interface {
 	MiniLoginByAuth(context.Context, *MiniAuthReq) (*LoginResp, error)
 	GetCaptcha(context.Context, *Empty) (*CaptchaResp, error)
 	CaptchaCompare(context.Context, *CaptchaCheckReq) (*CaptchaCheckResp, error)
+	PasswordLogin(context.Context, *PasswordLoginReq) (*LoginResp, error)
 	mustEmbedUnimplementedLoginRpcServer()
 }
 
@@ -98,6 +109,9 @@ func (UnimplementedLoginRpcServer) GetCaptcha(context.Context, *Empty) (*Captcha
 }
 func (UnimplementedLoginRpcServer) CaptchaCompare(context.Context, *CaptchaCheckReq) (*CaptchaCheckResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CaptchaCompare not implemented")
+}
+func (UnimplementedLoginRpcServer) PasswordLogin(context.Context, *PasswordLoginReq) (*LoginResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PasswordLogin not implemented")
 }
 func (UnimplementedLoginRpcServer) mustEmbedUnimplementedLoginRpcServer() {}
 
@@ -184,6 +198,24 @@ func _LoginRpc_CaptchaCompare_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LoginRpc_PasswordLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PasswordLoginReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginRpcServer).PasswordLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.LoginRpc/PasswordLogin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginRpcServer).PasswordLogin(ctx, req.(*PasswordLoginReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LoginRpc_ServiceDesc is the grpc.ServiceDesc for LoginRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +238,10 @@ var LoginRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CaptchaCompare",
 			Handler:    _LoginRpc_CaptchaCompare_Handler,
+		},
+		{
+			MethodName: "PasswordLogin",
+			Handler:    _LoginRpc_PasswordLogin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

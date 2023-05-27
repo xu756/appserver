@@ -20,12 +20,14 @@ type (
 	LoginReq         = pb.LoginReq
 	LoginResp        = pb.LoginResp
 	MiniAuthReq      = pb.MiniAuthReq
+	PasswordLoginReq = pb.PasswordLoginReq
 
 	LoginRpc interface {
 		MiniLoginByMobile(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		MiniLoginByAuth(ctx context.Context, in *MiniAuthReq, opts ...grpc.CallOption) (*LoginResp, error)
 		GetCaptcha(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CaptchaResp, error)
 		CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error)
+		PasswordLogin(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	}
 
 	defaultLoginRpc struct {
@@ -57,4 +59,9 @@ func (m *defaultLoginRpc) GetCaptcha(ctx context.Context, in *Empty, opts ...grp
 func (m *defaultLoginRpc) CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error) {
 	client := pb.NewLoginRpcClient(m.cli.Conn())
 	return client.CaptchaCompare(ctx, in, opts...)
+}
+
+func (m *defaultLoginRpc) PasswordLogin(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
+	client := pb.NewLoginRpcClient(m.cli.Conn())
+	return client.PasswordLogin(ctx, in, opts...)
 }

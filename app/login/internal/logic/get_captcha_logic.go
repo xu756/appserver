@@ -22,7 +22,7 @@ func NewGetCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetCap
 	}
 }
 
-func (l *GetCaptchaLogic) GetCaptcha() (*pb.CaptchaResp, error) {
+func (l *GetCaptchaLogic) GetCaptcha(in *pb.Empty) (*pb.CaptchaResp, error) {
 	dots, b64, tb64, key, err := l.svcCtx.Captcha.Generate()
 	if err != nil {
 		panic(err)

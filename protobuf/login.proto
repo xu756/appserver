@@ -32,10 +32,16 @@ message CaptchaCheckReq{
 message CaptchaCheckResp{
   bool result = 1;
 }
+// 密码登录
+message PasswordLoginReq{
+  string username = 1;
+  string password = 2;
+}
 
 service LoginRpc {
   rpc MiniLoginByMobile (loginReq) returns (loginResp);
   rpc MiniLoginByAuth (MiniAuthReq) returns (loginResp);
   rpc GetCaptcha (Empty) returns (CaptchaResp);
   rpc CaptchaCompare (CaptchaCheckReq) returns (CaptchaCheckResp);
+  rpc PasswordLogin (PasswordLoginReq) returns (loginResp);
 }
