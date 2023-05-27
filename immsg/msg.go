@@ -1,4 +1,4 @@
-package msg
+package immsg
 
 import "github.com/zeromicro/go-zero/core/jsonx"
 
@@ -18,8 +18,11 @@ func (m *Msg) ToBytes() []byte {
 }
 
 // ToMsg uint8[] to Msg
-func ToMsg(data []byte) *Msg {
+func ToMsg(data []byte) (*Msg, error) {
 	msg := &Msg{}
-	_ = jsonx.Unmarshal(data, msg)
-	return msg
+	err := jsonx.Unmarshal(data, msg)
+	if err != nil {
+		return nil, err
+	}
+	return msg, nil
 }

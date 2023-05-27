@@ -54,7 +54,8 @@ func (l *ClientLogic) read() {
 					l.closeClient()
 					return
 				}
-				Hubs.Broadcast <- message
+				l.client.reader <- message
+				go l.msgLogic()
 			}
 		}
 	}()
