@@ -1,77 +1,77 @@
 syntax = "v1"
 
 info(
-    title: "小程序api"
-    desc: "小程序api"
-    author: "xu756"
-    email: "756334744@qq.com"
-    version: "v1"
+	title: "小程序api"
+	desc: "小程序api"
+	author: "xu756"
+	email: "756334744@qq.com"
+	version: "v1"
 )
 
 type (
-    //  手机号验证码登录
-    LoginByMobileReq {
-        Mobile string `json:"mobile"`
-        SmsCode string `json:"smscode"`
-    }
-        // 登录返回
-    LoginResp {
-        AccessToken string `json:"access_token"`
-        AccessExpire int64 `json:"access_expire"`
-        RefreshAfter int64 `json:"refresh_after"`
-    }
-        // 一键授权
-    MiniAuthReq {
-        Code string `path:"code"`
-    }
+	//  手机号验证码登录
+	LoginByMobileReq {
+		Mobile  string `json:"mobile"`
+		SmsCode string `json:"smscode"`
+	}
+	// 登录返回
+	LoginResp {
+		AccessToken  string `json:"access_token"`
+		AccessExpire int64  `json:"access_expire"`
+		RefreshAfter int64  `json:"refresh_after"`
+	}
+	// 一键授权
+	MiniAuthReq {
+		Code string `path:"code"`
+	}
 )
 type (
-    //  获取验证码
-    EmptyReq {
-    }
-    CaptchaResp {
-        Code int64 `json:"code"`
-        Key string `json:"key"`
-        Image string `json:"image"`
-        Thumb string `json:"thumb"`
-    }
-        // 验证码验证
-    CaptchaReq {
-        Dots []int64 `json:"dots"`
-        Key string `json:"key"`
-    }
-        //  验证码比对
-    CaptchaCompareResp {
-        Ok bool `json:"ok"`
-    }
-        //  用户密码登录
-    LoginByPasswordReq {
-        Username string `json:"username"`
-        Password string `json:"password"`
-    }
+	//  获取验证码
+	EmptyReq {
+	}
+	CaptchaResp {
+		Code  int64  `json:"code"`
+		Key   string `json:"key"`
+		Image string `json:"image"`
+		Thumb string `json:"thumb"`
+	}
+	// 验证码验证
+	CaptchaReq {
+		Dots []int64 `json:"dots"`
+		Key  string  `json:"key"`
+	}
+	//  验证码比对
+	CaptchaCompareResp {
+		Ok bool `json:"ok"`
+	}
+	//  用户密码登录
+	LoginByPasswordReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
 )
 
 @server(
-    prefix: appserver/login
+	prefix: appserver/login
 )
 service login-api {
-    @doc "获取验证码"
-    @handler Captcha
-    get /captcha returns (CaptchaResp)
-
-    @doc "验证码验证"
-    @handler CaptchaCompare
-    post /captcha (CaptchaReq) returns (CaptchaCompareResp)
-
-    @doc "手机号登录"
-    @handler LoginByMobile
-    post /mobile (LoginByMobileReq) returns (LoginResp)
-
-    @doc "一键授权"
-    @handler MiniAuth
-    post /auth/:code (MiniAuthReq) returns (LoginResp)
-
-    @doc "用户密码登录"
-    @handler LoginByPassword
-    post /password (LoginByPasswordReq) returns (LoginResp)
+	@doc "获取验证码"
+	@handler Captcha
+	get /captcha returns (CaptchaResp)
+	
+	@doc "验证码验证"
+	@handler CaptchaCompare
+	post /captcha (CaptchaReq) returns (CaptchaCompareResp)
+	
+	@doc "手机号登录"
+	@handler LoginByMobile
+	post /mobile (LoginByMobileReq) returns (LoginResp)
+	
+	@doc "一键授权"
+	@handler MiniAuth
+	post /auth/:code (MiniAuthReq) returns (LoginResp)
+	
+	@doc "用户密码登录"
+	@handler LoginByPassword
+	post /password (LoginByPasswordReq) returns (LoginResp)
 }

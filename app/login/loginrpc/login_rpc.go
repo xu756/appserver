@@ -16,18 +16,33 @@ type (
 	CaptchaCheckReq  = pb.CaptchaCheckReq
 	CaptchaCheckResp = pb.CaptchaCheckResp
 	CaptchaResp      = pb.CaptchaResp
+	CheckSmsReq      = pb.CheckSmsReq
 	Empty            = pb.Empty
 	LoginReq         = pb.LoginReq
 	LoginResp        = pb.LoginResp
 	MiniAuthReq      = pb.MiniAuthReq
 	PasswordLoginReq = pb.PasswordLoginReq
+	Register         = pb.Register
+	SendSmsReq       = pb.SendSmsReq
+	SendSmsResp      = pb.SendSmsResp
 
 	LoginRpc interface {
+		// 手机号登录
 		MiniLoginByMobile(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+		// 小程序登录
 		MiniLoginByAuth(ctx context.Context, in *MiniAuthReq, opts ...grpc.CallOption) (*LoginResp, error)
+		// 图形验证码
 		GetCaptcha(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CaptchaResp, error)
+		// 验证码比对
 		CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error)
-		PasswordLogin(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+		// 密码登录
+		LoginByPassword(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+		// 注册
+		UserRegister(ctx context.Context, in *Register, opts ...grpc.CallOption) (*LoginResp, error)
+		// 发送短信验证码
+		SendSms(ctx context.Context, in *SendSmsReq, opts ...grpc.CallOption) (*SendSmsResp, error)
+		// 验证短信验证码
+		CheckSms(ctx context.Context, in *CheckSmsReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error)
 	}
 
 	defaultLoginRpc struct {
@@ -41,27 +56,50 @@ func NewLoginRpc(cli zrpc.Client) LoginRpc {
 	}
 }
 
+// 手机号登录
 func (m *defaultLoginRpc) MiniLoginByMobile(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := pb.NewLoginRpcClient(m.cli.Conn())
 	return client.MiniLoginByMobile(ctx, in, opts...)
 }
 
+// 小程序登录
 func (m *defaultLoginRpc) MiniLoginByAuth(ctx context.Context, in *MiniAuthReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := pb.NewLoginRpcClient(m.cli.Conn())
 	return client.MiniLoginByAuth(ctx, in, opts...)
 }
 
+// 图形验证码
 func (m *defaultLoginRpc) GetCaptcha(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CaptchaResp, error) {
 	client := pb.NewLoginRpcClient(m.cli.Conn())
 	return client.GetCaptcha(ctx, in, opts...)
 }
 
+// 验证码比对
 func (m *defaultLoginRpc) CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error) {
 	client := pb.NewLoginRpcClient(m.cli.Conn())
 	return client.CaptchaCompare(ctx, in, opts...)
 }
 
-func (m *defaultLoginRpc) PasswordLogin(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
+// 密码登录
+func (m *defaultLoginRpc) LoginByPassword(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := pb.NewLoginRpcClient(m.cli.Conn())
-	return client.PasswordLogin(ctx, in, opts...)
+	return client.LoginByPassword(ctx, in, opts...)
+}
+
+// 注册
+func (m *defaultLoginRpc) UserRegister(ctx context.Context, in *Register, opts ...grpc.CallOption) (*LoginResp, error) {
+	client := pb.NewLoginRpcClient(m.cli.Conn())
+	return client.UserRegister(ctx, in, opts...)
+}
+
+// 发送短信验证码
+func (m *defaultLoginRpc) SendSms(ctx context.Context, in *SendSmsReq, opts ...grpc.CallOption) (*SendSmsResp, error) {
+	client := pb.NewLoginRpcClient(m.cli.Conn())
+	return client.SendSms(ctx, in, opts...)
+}
+
+// 验证短信验证码
+func (m *defaultLoginRpc) CheckSms(ctx context.Context, in *CheckSmsReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error) {
+	client := pb.NewLoginRpcClient(m.cli.Conn())
+	return client.CheckSms(ctx, in, opts...)
 }

@@ -20,7 +20,7 @@ message Empty {}
 //  图形验证码
 message CaptchaResp{
   int64 code = 1;
-  string key =2;
+  string key = 2;
   string image = 3;
   string thumb = 4;
 }
@@ -38,10 +38,45 @@ message PasswordLoginReq{
   string password = 2;
 }
 
+//注册
+message Register{
+  string mobile = 1;
+}
+// 发送验证码
+message SendSmsReq{
+  string mobile = 1;
+}
+
+// 发送验证码结果
+message SendSmsResp{
+  bool result = 1;
+  string key = 2;
+  int64 expire = 3;
+}
+
+//验证验证码
+message CheckSmsReq{
+  string mobile = 1;
+  string code = 2;
+  string key = 3;
+}
+
+
 service LoginRpc {
+  // 手机号登录
   rpc MiniLoginByMobile (loginReq) returns (loginResp);
+  // 小程序登录
   rpc MiniLoginByAuth (MiniAuthReq) returns (loginResp);
+  // 图形验证码
   rpc GetCaptcha (Empty) returns (CaptchaResp);
+  // 验证码比对
   rpc CaptchaCompare (CaptchaCheckReq) returns (CaptchaCheckResp);
-  rpc PasswordLogin (PasswordLoginReq) returns (loginResp);
+  // 密码登录
+  rpc LoginByPassword (PasswordLoginReq) returns (loginResp);
+  // 注册
+  rpc UserRegister (Register) returns (loginResp);
+  // 发送短信验证码
+  rpc SendSms (SendSmsReq) returns (SendSmsResp);
+  // 验证短信验证码
+  rpc CheckSms (CheckSmsReq) returns (CaptchaCheckResp);
 }

@@ -22,11 +22,22 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LoginRpcClient interface {
+	// 手机号登录
 	MiniLoginByMobile(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	// 小程序登录
 	MiniLoginByAuth(ctx context.Context, in *MiniAuthReq, opts ...grpc.CallOption) (*LoginResp, error)
+	// 图形验证码
 	GetCaptcha(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CaptchaResp, error)
+	// 验证码比对
 	CaptchaCompare(ctx context.Context, in *CaptchaCheckReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error)
-	PasswordLogin(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	// 密码登录
+	LoginByPassword(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	// 注册
+	UserRegister(ctx context.Context, in *Register, opts ...grpc.CallOption) (*LoginResp, error)
+	// 发送短信验证码
+	SendSms(ctx context.Context, in *SendSmsReq, opts ...grpc.CallOption) (*SendSmsResp, error)
+	// 验证短信验证码
+	CheckSms(ctx context.Context, in *CheckSmsReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error)
 }
 
 type loginRpcClient struct {
@@ -73,9 +84,36 @@ func (c *loginRpcClient) CaptchaCompare(ctx context.Context, in *CaptchaCheckReq
 	return out, nil
 }
 
-func (c *loginRpcClient) PasswordLogin(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
+func (c *loginRpcClient) LoginByPassword(ctx context.Context, in *PasswordLoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	out := new(LoginResp)
-	err := c.cc.Invoke(ctx, "/pb.LoginRpc/PasswordLogin", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.LoginRpc/LoginByPassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *loginRpcClient) UserRegister(ctx context.Context, in *Register, opts ...grpc.CallOption) (*LoginResp, error) {
+	out := new(LoginResp)
+	err := c.cc.Invoke(ctx, "/pb.LoginRpc/UserRegister", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *loginRpcClient) SendSms(ctx context.Context, in *SendSmsReq, opts ...grpc.CallOption) (*SendSmsResp, error) {
+	out := new(SendSmsResp)
+	err := c.cc.Invoke(ctx, "/pb.LoginRpc/SendSms", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *loginRpcClient) CheckSms(ctx context.Context, in *CheckSmsReq, opts ...grpc.CallOption) (*CaptchaCheckResp, error) {
+	out := new(CaptchaCheckResp)
+	err := c.cc.Invoke(ctx, "/pb.LoginRpc/CheckSms", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -86,11 +124,22 @@ func (c *loginRpcClient) PasswordLogin(ctx context.Context, in *PasswordLoginReq
 // All implementations must embed UnimplementedLoginRpcServer
 // for forward compatibility
 type LoginRpcServer interface {
+	// 手机号登录
 	MiniLoginByMobile(context.Context, *LoginReq) (*LoginResp, error)
+	// 小程序登录
 	MiniLoginByAuth(context.Context, *MiniAuthReq) (*LoginResp, error)
+	// 图形验证码
 	GetCaptcha(context.Context, *Empty) (*CaptchaResp, error)
+	// 验证码比对
 	CaptchaCompare(context.Context, *CaptchaCheckReq) (*CaptchaCheckResp, error)
-	PasswordLogin(context.Context, *PasswordLoginReq) (*LoginResp, error)
+	// 密码登录
+	LoginByPassword(context.Context, *PasswordLoginReq) (*LoginResp, error)
+	// 注册
+	UserRegister(context.Context, *Register) (*LoginResp, error)
+	// 发送短信验证码
+	SendSms(context.Context, *SendSmsReq) (*SendSmsResp, error)
+	// 验证短信验证码
+	CheckSms(context.Context, *CheckSmsReq) (*CaptchaCheckResp, error)
 	mustEmbedUnimplementedLoginRpcServer()
 }
 
@@ -110,8 +159,17 @@ func (UnimplementedLoginRpcServer) GetCaptcha(context.Context, *Empty) (*Captcha
 func (UnimplementedLoginRpcServer) CaptchaCompare(context.Context, *CaptchaCheckReq) (*CaptchaCheckResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CaptchaCompare not implemented")
 }
-func (UnimplementedLoginRpcServer) PasswordLogin(context.Context, *PasswordLoginReq) (*LoginResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PasswordLogin not implemented")
+func (UnimplementedLoginRpcServer) LoginByPassword(context.Context, *PasswordLoginReq) (*LoginResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginByPassword not implemented")
+}
+func (UnimplementedLoginRpcServer) UserRegister(context.Context, *Register) (*LoginResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserRegister not implemented")
+}
+func (UnimplementedLoginRpcServer) SendSms(context.Context, *SendSmsReq) (*SendSmsResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendSms not implemented")
+}
+func (UnimplementedLoginRpcServer) CheckSms(context.Context, *CheckSmsReq) (*CaptchaCheckResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckSms not implemented")
 }
 func (UnimplementedLoginRpcServer) mustEmbedUnimplementedLoginRpcServer() {}
 
@@ -198,20 +256,74 @@ func _LoginRpc_CaptchaCompare_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _LoginRpc_PasswordLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _LoginRpc_LoginByPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PasswordLoginReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LoginRpcServer).PasswordLogin(ctx, in)
+		return srv.(LoginRpcServer).LoginByPassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.LoginRpc/PasswordLogin",
+		FullMethod: "/pb.LoginRpc/LoginByPassword",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginRpcServer).PasswordLogin(ctx, req.(*PasswordLoginReq))
+		return srv.(LoginRpcServer).LoginByPassword(ctx, req.(*PasswordLoginReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LoginRpc_UserRegister_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Register)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginRpcServer).UserRegister(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.LoginRpc/UserRegister",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginRpcServer).UserRegister(ctx, req.(*Register))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LoginRpc_SendSms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendSmsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginRpcServer).SendSms(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.LoginRpc/SendSms",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginRpcServer).SendSms(ctx, req.(*SendSmsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LoginRpc_CheckSms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckSmsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginRpcServer).CheckSms(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.LoginRpc/CheckSms",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginRpcServer).CheckSms(ctx, req.(*CheckSmsReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -240,8 +352,20 @@ var LoginRpc_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _LoginRpc_CaptchaCompare_Handler,
 		},
 		{
-			MethodName: "PasswordLogin",
-			Handler:    _LoginRpc_PasswordLogin_Handler,
+			MethodName: "LoginByPassword",
+			Handler:    _LoginRpc_LoginByPassword_Handler,
+		},
+		{
+			MethodName: "UserRegister",
+			Handler:    _LoginRpc_UserRegister_Handler,
+		},
+		{
+			MethodName: "SendSms",
+			Handler:    _LoginRpc_SendSms_Handler,
+		},
+		{
+			MethodName: "CheckSms",
+			Handler:    _LoginRpc_CheckSms_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

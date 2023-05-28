@@ -32,6 +32,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/auth/:code",
 				Handler: MiniAuthHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/password",
+				Handler: LoginByPasswordHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/appserver/login"),
 	)

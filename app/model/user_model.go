@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -29,6 +30,15 @@ func NewUserModel(conn sqlx.SqlConn, c cache.CacheConf) UserModel {
 }
 
 func (m *customUserModel) UserLogin(ctx context.Context, username string) (*User, error) {
-
-	return &User{}, nil
+	var resp User
+	// username 或mobile 为username
+	err := m.QueryRowNoCacheCtx(ctx, &resp, "select * from user where username = ? or mobile = ?", username, username)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
