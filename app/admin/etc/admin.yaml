@@ -1,9 +1,9 @@
-Name: im.rpc
-ListenOn: 0.0.0.0:6002
+Name: admin.rpc
+ListenOn: 0.0.0.0:6003
 Etcd:
   Hosts:
-    - etcd:2379
-  Key: im.rpc
+  - etcd:2379
+  Key: admin.rpc
 
 
 
@@ -20,10 +20,3 @@ RedisConf:
 
 DbSource: appserver:XVwp5gdAH4Ghjn7uf567@tcp(mysql:3306)/appserver?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 
-
-
-ConnRpc:
-  Etcd:
-    Hosts:
-      - etcd:2379
-    Key: conn.rpc

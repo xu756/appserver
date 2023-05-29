@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/xu756/appserver/internal/result"
 	"net/http"
 
 	"github.com/xu756/appserver/api/admin/internal/logic"
@@ -19,10 +20,6 @@ func getUserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		l := logic.NewGetUserInfoLogic(r.Context(), svcCtx)
 		resp, err := l.GetUserInfo(&req)
-		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
-		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
-		}
+		result.HttpResult(r, w, resp, err)
 	}
 }

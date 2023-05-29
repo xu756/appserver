@@ -23,7 +23,7 @@ type (
 
 @server(
 	prefix : appserver/admin/api
-	middleware : Auth
+	jwt : Auth
 )
 service admin-api {
 	@doc "获取用户信息"

@@ -2,21 +2,18 @@ package svc
 
 import (
 	"github.com/xu756/appserver/api/admin/internal/config"
-	"github.com/xu756/appserver/api/admin/internal/middleware"
-	"github.com/xu756/appserver/internal/xjwt"
-	"github.com/zeromicro/go-zero/rest"
+	"github.com/xu756/appserver/app/admin/adminrpc"
+	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {
-	Config config.Config
-	Auth   rest.Middleware
-	Jwt    xjwt.JWT
+	Config   config.Config
+	AdminRpc adminrpc.AdminRpc
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config: c,
-		Auth:   middleware.NewAuthMiddleware().Handle,
-		Jwt:    c.JWT,
+		Config:   c,
+		AdminRpc: adminrpc.NewAdminRpc(zrpc.MustNewClient(c.AdminRpc)),
 	}
 }

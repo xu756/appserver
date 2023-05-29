@@ -2,11 +2,13 @@ Name: admin-api
 Host: 0.0.0.0
 Port: 7002
 
-JWT:
-  SignKey: "1JhJg3u9gj4kh2i8u7hki877" # 秘钥
-  MaxRefresh: 100000           #刷新token的最大过期时间
-  DevExpireTime: 50000               #开发模式令牌过期时间
-  DebugExpireTime: 500              #调试模式令牌过期时间
-  ProdExpireTime: 5000             #生产环境令牌过期时间
-  Issuer: "conn.rpc"  #token颁发者
-  Mode: "dev"            #当前模块的运行状态
+
+Auth:
+  AccessSecret: "1JhJg3u9gj4kh2i8u7hki877" # 秘钥
+  AccessExpire: 50000             #生产环境令牌过期时间
+
+AdminRpc:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    Key: admin.rpc

@@ -11,16 +11,14 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Auth},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/get-admin-info",
-					Handler: getUserInfoHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/get-admin-info",
+				Handler: getUserInfoHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/appserver/admin/api"),
 	)
 }

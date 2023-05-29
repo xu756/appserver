@@ -1,6 +1,7 @@
 package xjwt
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/xu756/appserver/internal/tool"
@@ -11,18 +12,30 @@ import (
 )
 
 var (
-	ErrTokenExpired           = xerr.MsgError("令牌已过期")
-	ErrTokenExpiredMaxRefresh = xerr.MsgError("令牌已过最大刷新时间")
-	ErrTokenMalformed         = xerr.MsgError("请求令牌格式有误")
-	ErrTokenInvalid           = xerr.MsgError("请求令牌无效")
-	ErrHeaderEmpty            = xerr.MsgError("需要认证才能访问！")
-	ErrHeaderMalformed        = xerr.MsgError("请求头中 Authorization 格式有误")
+	ErrTokenExpired    = xerr.MsgError("令牌已过期")
+	ErrTokenMalformed  = xerr.MsgError("请求令牌格式有误")
+	ErrTokenInvalid    = xerr.MsgError("请求令牌无效")
+	ErrHeaderEmpty     = xerr.MsgError("需要认证才能访问！")
+	ErrHeaderMalformed = xerr.MsgError("请求头中 Authorization 格式有误")
 )
 
 type AuthInfo struct {
-	ID     uint64
-	Job    string
-	Issuer string
+	ID     uint64 `json:"Id"`
+	Job    string `json:"Job"`
+	Issuer string `json:"Issuer"`
+}
+
+func AuthToInfo(b any) *AuthInfo {
+	a := b.(map[string]interface{})
+	i, _ := a["Id"].(json.Number).Int64()
+	id := uint64(i)
+	job := a["Job"].(string)
+	issuer := a["Issuer"].(string)
+	return &AuthInfo{
+		ID:     id,
+		Job:    job,
+		Issuer: issuer,
+	}
 }
 
 func (a *AuthInfo) GetStringID() uint64 {
@@ -46,19 +59,6 @@ type JWT struct {
 	Issuer          string // token颁发者
 	Mode            string // 当前模块的运行状态
 }
-
-//// NewJWT 生成一个 JWT 实例
-//func NewJWT(signKey string, maxRefresh int64, issuer string, appMode string, devExpireTime int64, debugExpireTime int64, prodExpireTime int64) JWT {
-//	return JWT{
-//		SignKey:         signKey,
-//		MaxRefresh:      maxRefresh,
-//		Issuer:          issuer,
-//		Mode:            appMode,
-//		DevExpireTime:   devExpireTime,
-//		DebugExpireTime: debugExpireTime,
-//		ProdExpireTime:  prodExpireTime,
-//	}
-//}
 
 // CustomJWTClaims
 //
@@ -120,34 +120,7 @@ func (j *JWT) ParserToken(tokenString string) (*CustomJWTClaims, error) {
 	return nil, ErrTokenInvalid
 }
 
-// RefreshToken 更新 Token，用以提供 refresh token 接口
-func (j *JWT) RefreshToken(tokenString string) (string, error) {
-	// 1. 调用 jwt 库解析用户传参的 Token
-	token, err := j.parseTokenString(tokenString)
-
-	// 2. 解析出错，未报错证明是合法的 Token（甚至未到过期时间）
-	if err != nil {
-		validationErr, ok := err.(*jwt.ValidationError)
-		// 满足 refresh 的条件：只是单一的报错 ValidationErrorExpired
-		if !ok || validationErr.Errors != jwt.ValidationErrorExpired {
-			return "", xerr.LogOut("令牌无效")
-		}
-	}
-
-	// 3. 解析 JWTCustomClaims 的数据
-	claims := token.Claims.(*CustomJWTClaims)
-
-	// 4. 检查是否过了『最大允许刷新的时间』
-	t := tool.TimeNowInTimezone().Add(-time.Duration(j.MaxRefresh)).Unix()
-	// 首次签名时间 > (当前时间 - 最大允许刷新时间)
-	if claims.IssuedAt.Unix() > t {
-		claims.RegisteredClaims.ExpiresAt = jwt.NewNumericDate(j.expireAtTime())
-		return j.createToken(*claims)
-	}
-
-	return "", ErrTokenExpiredMaxRefresh
-}
-
+// GetTokenFromHeader 获取请求头中的token
 func (j *JWT) GetTokenFromHeader(r *http.Request, headerName string) (string, error) {
 	authHeader := r.Header.Get(headerName)
 	if authHeader == "" {
