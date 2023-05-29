@@ -47,18 +47,18 @@ type JWT struct {
 	Mode            string // 当前模块的运行状态
 }
 
-// NewJWT 生成一个 JWT 实例
-func NewJWT(signKey string, maxRefresh int64, issuer string, appMode string, devExpireTime int64, debugExpireTime int64, prodExpireTime int64) JWT {
-	return JWT{
-		SignKey:         signKey,
-		MaxRefresh:      maxRefresh,
-		Issuer:          issuer,
-		Mode:            appMode,
-		DevExpireTime:   devExpireTime,
-		DebugExpireTime: debugExpireTime,
-		ProdExpireTime:  prodExpireTime,
-	}
-}
+//// NewJWT 生成一个 JWT 实例
+//func NewJWT(signKey string, maxRefresh int64, issuer string, appMode string, devExpireTime int64, debugExpireTime int64, prodExpireTime int64) JWT {
+//	return JWT{
+//		SignKey:         signKey,
+//		MaxRefresh:      maxRefresh,
+//		Issuer:          issuer,
+//		Mode:            appMode,
+//		DevExpireTime:   devExpireTime,
+//		DebugExpireTime: debugExpireTime,
+//		ProdExpireTime:  prodExpireTime,
+//	}
+//}
 
 // CustomJWTClaims
 //
