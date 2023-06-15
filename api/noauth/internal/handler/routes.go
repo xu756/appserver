@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/xu756/appserver/api/login/internal/svc"
+	"github.com/xu756/appserver/api/noauth/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -24,20 +24,20 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/mobile",
+				Path:    "/login/mobile",
 				Handler: LoginByMobileHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/auth/:code",
+				Path:    "/login/auth/:code",
 				Handler: MiniAuthHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/password",
+				Path:    "/login/password",
 				Handler: LoginByPasswordHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/appserver/login"),
+		rest.WithPrefix("/appserver/noAuth"),
 	)
 }

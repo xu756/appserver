@@ -1,7 +1,7 @@
 package svc
 
 import (
-	"github.com/xu756/appserver/api/login/internal/config"
+	"github.com/xu756/appserver/api/noauth/internal/config"
 	"github.com/xu756/appserver/app/login/loginrpc"
 	"github.com/zeromicro/go-zero/zrpc"
 )

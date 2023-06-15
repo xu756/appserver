@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"github.com/xu756/appserver/api/login/internal/svc"
-	"github.com/xu756/appserver/api/login/internal/types"
+	"github.com/xu756/appserver/api/noauth/internal/svc"
+	"github.com/xu756/appserver/api/noauth/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
