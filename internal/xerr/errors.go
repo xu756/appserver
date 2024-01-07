@@ -1,44 +1,69 @@
 package xerr
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/cloudwego/kitex/pkg/remote"
+)
 
 /**
 常用通用固定错误
 */
 
 type CodeError struct {
-	errCode uint32
-	errMsg  string
+	Code int32  `json:"code"`
+	Msg  string `json:"msg"`
 }
 
-// GetErrCode 返回给前端的错误码
-func (e *CodeError) GetErrCode() uint32 {
-	return e.errCode
+func (e CodeError) Error() string {
+	return fmt.Sprintf("code:%d,msg:%s", e.Code, e.Msg)
 }
 
-// GetErrMsg 返回给前端显示端错误信息
-func (e *CodeError) GetErrMsg() string {
-	return e.errMsg
+func (e CodeError) GetCode() int32 {
+	return e.Code
 }
 
-func (e *CodeError) Error() string {
-	return fmt.Sprintf("ErrCode:%d，ErrMsg:%s", e.errCode, e.errMsg)
+func GetMsg(code int32) string {
+	return message[code]
+
 }
 
-func StystenError(err interface{}) *CodeError {
-	return &CodeError{errCode: StystemEoore, errMsg: fmt.Sprintf("%v", err)}
+func NewErr(code int32, msg string) error {
+	return CodeError{
+		Code: code,
+		Msg:  msg,
+	}
 }
 
-// DbErr 数据库错误
-func DbErr(err interface{}) *CodeError {
-	return &CodeError{errCode: DbError, errMsg: fmt.Sprintf("%v", err)}
+func NewSprintfErr(code int32, format string, a ...interface{}) error {
+	err := CodeError{
+		Code: code,
+		Msg:  fmt.Sprintf(format, a...),
+	}
+	return remote.NewTransError(code, err)
 }
 
-func MsgError(msg string) *CodeError {
-	return &CodeError{errCode: MsError, errMsg: msg}
+func ErrMsg(code int32) error {
+
+	err := CodeError{
+		Code: code,
+		Msg:  message[code],
+	}
+	return remote.NewTransError(code, err)
+
+}
+func ParamErr() error {
+	err := CodeError{
+		Code: Param,
+		Msg:  message[Param],
+	}
+	return remote.NewTransError(Param, err)
+
 }
 
-func LogOut(err interface{}) *CodeError {
-	return &CodeError{errCode: LogOutError, errMsg: fmt.Sprintf("%v", err)}
-
+func SystemErr() error {
+	err := CodeError{
+		Code: SystemErrCode,
+		Msg:  message[SystemErrCode],
+	}
+	return remote.NewTransError(SystemErrCode, err)
 }

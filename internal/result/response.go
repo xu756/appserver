@@ -1,21 +1,27 @@
 package result
 
+import (
+	"server/internal/tool"
+	"time"
+)
+
 type ResponseSuccessBean struct {
-	Code uint32      `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Success bool        `json:"success"`
+	Data    interface{} `json:"data"`
 }
 type NullJson struct{}
 
-func Success(data interface{}) *ResponseSuccessBean {
-	return &ResponseSuccessBean{200, "OK", data}
+func successRes(data interface{}) *ResponseSuccessBean {
+	return &ResponseSuccessBean{true, data}
 }
 
 type ResponseErrorBean struct {
-	Code uint32 `json:"code"`
-	Msg  string `json:"msg"`
+	Success      bool      `json:"success"`
+	ErrorCode    int32     `json:"errorCode"`
+	ErrorMessage string    `json:"errorMessage"`
+	Timestamp    time.Time `json:"timestamp"`
 }
 
-func Error(errCode uint32, errMsg string) *ResponseErrorBean {
-	return &ResponseErrorBean{errCode, errMsg}
+func errorRes(errCode int32, errMsg string) *ResponseErrorBean {
+	return &ResponseErrorBean{false, errCode, errMsg, tool.TimeNow()}
 }

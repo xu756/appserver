@@ -1,0 +1,24 @@
+addr:
+  apiAddr: 0.0.0.0:7080
+  publicAddr: 0.0.0.0:8081
+rpc:
+  publicRpc: 0.0.0.0:8081
+dbConfig:
+  dbType: postgres
+  addr: productLinux
+  port: 15432
+  username: root
+  password: fyU0bj2KLndYN6CKYubb
+  dbName: appServer
+redisConfig:
+  addr: productLinux:16379
+  password: Y5dg5tg8050oigInC30sf
+  db: 2
+jwtConfig:
+  signKey: Tqede8rNvZvbKmjqYpQRvwLxsGR
+  expire: 36000
+emailConfig:
+  smtpAddr: smtp.feishu.cn:587
+  password: smcfUO20MyiAEijy
+  from: grade@xynu.email
+  host: smtp.feishu.cn
