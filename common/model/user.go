@@ -27,3 +27,8 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	u.UpdatedAtInt64 = tx.NowFunc().Unix()
 	return
 }
+
+func (u *User) BeforeUpdate(tx *gorm.DB) (err error) {
+	u.UpdatedAtInt64 = tx.NowFunc().Unix()
+	return
+}
