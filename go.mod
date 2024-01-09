@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	entgo.io/ent v0.12.5 // indirect
 	github.com/apache/thrift v0.13.0 // indirect
 	github.com/bytedance/go-tagexpr/v2 v2.9.2 // indirect
 	github.com/bytedance/gopkg v0.0.0-20230728082804-614d0af6619b // indirect
