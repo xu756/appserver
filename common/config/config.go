@@ -11,13 +11,13 @@ type Config struct {
 
 // Addr 服务地址 运行地址
 type Addr struct {
-	ApiAddr    string `yaml:"apiAddr"`
-	PublicAddr string `yaml:"publicAddr"`
+	AdminApiAddr string `yaml:"adminApiAddr"`
+	UserRpcAddr  string `yaml:"userRpcAddr"`
 }
 
 // Rpc 服务发现 调用的地址
 type Rpc struct {
-	PublicRpc string `yaml:"publicRpc"`
+	UserRpcAddr string `yaml:"userRpcAddr"`
 }
 
 type DbConfig struct {

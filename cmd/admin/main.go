@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"log"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"server/common/config"
 )
 
@@ -11,5 +11,5 @@ var file = flag.String("f", "", "config file path")
 func main() {
 	flag.Parse()
 	config.Init(*file)
-	log.Printf("【 AdminApi 】addr on %s", config.RunData.Addr.ApiAddr)
+	hlog.Debugf("【 AdminApi 】addr on %s", config.RunData.Addr.AdminApiAddr)
 }

@@ -1,8 +1,8 @@
 addr:
-  apiAddr: 0.0.0.0:7080
-  publicAddr: 0.0.0.0:8081
+  adminApiAddr: 0.0.0.0:7080
+  userRpcAddr: 0.0.0.0:8081
 rpc:
-  publicRpc: 0.0.0.0:8081
+  userRpcAddr: 0.0.0.0:8081
 dbConfig:
   dbType: postgres
   addr: productLinux
