@@ -2,7 +2,6 @@ package config
 
 import (
 	"gopkg.in/yaml.v3"
-	"log"
 	"os"
 )
 
@@ -19,5 +18,4 @@ func Init(path string) {
 		panic(err)
 	}
 	RunData = d
-	log.Print(RunData)
 }

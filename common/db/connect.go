@@ -91,10 +91,10 @@ func TestModel() Model {
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDb.SetConnMaxLifetime(time.Second)
 	log.Print("【 数据库连接成功 】")
-	err = CreateTable(db)
-	if err != nil {
-		panic(err)
-	}
+	//err = CreateTable(db)
+	//if err != nil {
+	//	panic(err)
+	//}
 	return &customModel{
 		Db: db,
 	}
