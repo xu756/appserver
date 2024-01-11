@@ -1,4 +1,4 @@
-package route
+package router
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"

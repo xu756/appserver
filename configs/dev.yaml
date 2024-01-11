@@ -5,13 +5,13 @@ rpc:
   userRpcAddr: 0.0.0.0:8081
 dbConfig:
   dbType: postgres
-  addr: productLinux
-  port: 15432
+  addr: 127.0.0.1
+  port: 5432
   username: root
   password: fyU0bj2KLndYN6CKYubb
   dbName: appServer
 redisConfig:
-  addr: productLinux:16379
+  addr: 127.0.0.1:6379
   password: Y5dg5tg8050oigInC30sf
   db: 2
 jwtConfig:
