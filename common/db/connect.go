@@ -48,17 +48,17 @@ func NewModel() Model {
 }
 
 func CreateTable(db *gorm.DB) error {
-	err := db.AutoMigrate(&model.UserModel{})
+	err := db.AutoMigrate(&model.User{})
 	if err != nil {
 		log.Printf("【 创建表失败 %s 】 ", "user")
 		return err
 	}
-	err = db.AutoMigrate(&model.RoleModel{})
+	err = db.AutoMigrate(&model.Role{})
 	if err != nil {
 		log.Printf("【 创建表失败 %s 】 ", "role")
 		return err
 	}
-	err = db.AutoMigrate(&model.UserRoleModel{})
+	err = db.AutoMigrate(&model.UserRole{})
 	if err != nil {
 		log.Printf("【 创建表失败 %s 】 ", "user_role")
 		return err

@@ -40,5 +40,4 @@ func init() {
 	message[SendSmsErr] = "短信发送失败"
 	message[CaptchaNotExist] = "验证码已过期"
 	//Upgrade
-	message[UpgradeErr] = "websocket升级失败"
 }

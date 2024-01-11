@@ -8,15 +8,15 @@ import (
 )
 
 type dbUserModel interface {
-	FindUserByUsername(ctx context.Context, userName string) (user *model.UserInfo, err error)
-	FindUserByMobile(ctx context.Context, mobile string) (user *model.UserInfo, err error)
+	FindUserByUsername(ctx context.Context, userName string) (user *model.User, err error)
+	FindUserByMobile(ctx context.Context, mobile string) (user *model.User, err error)
 	CreateUser(ctx context.Context, userName, mobile string, creator uint64) (err error)
 }
 
 // FindUserByUsername 根据用户名查找用户
-func (m *customModel) FindUserByUsername(ctx context.Context, userName string) (user *model.UserInfo, err error) {
+func (m *customModel) FindUserByUsername(ctx context.Context, userName string) (user *model.User, err error) {
 	tx := m.Db.WithContext(ctx).Where("deleted = ?", false)
-	err = tx.Model(&model.UserModel{}).Where("user_name = ?", userName).Limit(1).Find(&user).Error
+	err = tx.Model(&model.User{}).Where("user_name = ?", userName).Limit(1).Find(&user).Error
 	switch {
 	case user.UserUuid == "":
 		return nil, xerr.ErrMsg(xerr.UserNotExist)
@@ -27,9 +27,9 @@ func (m *customModel) FindUserByUsername(ctx context.Context, userName string) (
 }
 
 // FindUserByMobile 根据手机号查找用户
-func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (user *model.UserInfo, err error) {
+func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (user *model.User, err error) {
 	tx := m.Db.WithContext(ctx).Where("deleted = ?", false)
-	err = tx.Model(&model.UserModel{}).Where("mobile = ?", mobile).Limit(1).Find(&user).Error
+	err = tx.Model(&model.User{}).Where("mobile = ?", mobile).Limit(1).Find(&user).Error
 	switch {
 	case user.UserUuid == "":
 		return nil, xerr.ErrMsg(xerr.UserMobileNotExist)
@@ -41,8 +41,8 @@ func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (user
 
 // CreateUser 创建用户
 func (m *customModel) CreateUser(ctx context.Context, userName, mobile string, creator uint64) (err error) {
-	tx := m.Db.WithContext(ctx).Model(&model.UserModel{})
-	var user *model.UserModel
+	tx := m.Db.WithContext(ctx).Model(&model.User{})
+	var user *model.User
 	user.UserUuid = uuid.NewString()
 	user.UserName = userName
 	user.Mobile = mobile
