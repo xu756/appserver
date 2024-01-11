@@ -15,7 +15,7 @@ func InitRouter() {
 		server.WithMaxRequestBodySize(1024*1024*100),
 	)
 	h.Use(middleware.HertzJwt())
-	//router := h.Group("/wxapp")
-	//PublicRoute(router.Group("/public"))
+	router := h.Group("/admin")
+	LoginRouter(router.Group("/login"))
 	HttpServer = h
 }
