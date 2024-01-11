@@ -2,7 +2,6 @@ package db
 
 import (
 	"fmt"
-	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -51,17 +50,17 @@ func NewModel() Model {
 func CreateTable(db *gorm.DB) error {
 	err := db.AutoMigrate(&model.UserModel{})
 	if err != nil {
-		klog.Debugf("【 创建表失败 %s 】 ", "user")
+		log.Printf("【 创建表失败 %s 】 ", "user")
 		return err
 	}
 	err = db.AutoMigrate(&model.RoleModel{})
 	if err != nil {
-		klog.Debugf("【 创建表失败 %s 】 ", "role")
+		log.Printf("【 创建表失败 %s 】 ", "role")
 		return err
 	}
 	err = db.AutoMigrate(&model.UserRoleModel{})
 	if err != nil {
-		klog.Debugf("【 创建表失败 %s 】 ", "user_role")
+		log.Printf("【 创建表失败 %s 】 ", "user_role")
 		return err
 	}
 	return nil
