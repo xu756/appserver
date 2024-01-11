@@ -2,7 +2,6 @@ package xerr
 
 import (
 	"fmt"
-	"github.com/cloudwego/kitex/pkg/remote"
 )
 
 /**
@@ -28,42 +27,37 @@ func GetMsg(code int32) string {
 }
 
 func NewErr(code int32, msg string) error {
-	return CodeError{
+	return &CodeError{
 		Code: code,
 		Msg:  msg,
 	}
 }
 
 func NewSprintfErr(code int32, format string, a ...interface{}) error {
-	err := CodeError{
+	return CodeError{
 		Code: code,
 		Msg:  fmt.Sprintf(format, a...),
 	}
-	return remote.NewTransError(code, err)
 }
 
 func ErrMsg(code int32) error {
-
-	err := CodeError{
+	return &CodeError{
 		Code: code,
 		Msg:  message[code],
 	}
-	return remote.NewTransError(code, err)
 
 }
 func ParamErr() error {
-	err := CodeError{
+	return &CodeError{
 		Code: Param,
 		Msg:  message[Param],
 	}
-	return remote.NewTransError(Param, err)
 
 }
 
 func SystemErr() error {
-	err := CodeError{
+	return &CodeError{
 		Code: SystemErrCode,
 		Msg:  message[SystemErrCode],
 	}
-	return remote.NewTransError(SystemErrCode, err)
 }
