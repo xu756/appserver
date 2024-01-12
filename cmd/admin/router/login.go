@@ -4,10 +4,8 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/route"
-	"log"
 	"server/cmd/admin/rpc"
 	"server/internal/result"
-	"server/internal/xerr"
 	"server/kitex_gen/user"
 )
 
@@ -21,7 +19,7 @@ func LoginRouter(r *route.RouterGroup) {
 func loginByPassword(ctx context.Context, c *app.RequestContext) {
 	var req LoginByPasswordReq
 	if err := c.BindAndValidate(&req); err != nil {
-		result.HttpErrorCode(c, xerr.Param)
+		result.HttpParamErr(c)
 		return
 	}
 	res, err := rpc.UserClient.LoginByPassword(ctx, &user.LoginByPasswordReq{
@@ -30,8 +28,7 @@ func loginByPassword(ctx context.Context, c *app.RequestContext) {
 		SessionId: req.SessionId,
 	})
 	if err != nil {
-		log.Print(err)
-		result.HttpError(c, err)
+		result.HttpBizErr(c, err)
 		return
 	}
 	result.HttpSuccess(c, res)
@@ -40,7 +37,7 @@ func loginByPassword(ctx context.Context, c *app.RequestContext) {
 func loginByMobile(ctx context.Context, c *app.RequestContext) {
 	var req LoginByMobileReq
 	if err := c.BindAndValidate(&req); err != nil {
-		result.HttpError(c, xerr.ParamErr())
+		result.HttpParamErr(c)
 		return
 	}
 	res, err := rpc.UserClient.LoginByMobile(ctx, &user.LoginByMobileReq{
@@ -49,7 +46,7 @@ func loginByMobile(ctx context.Context, c *app.RequestContext) {
 		SessionId: req.SessionId,
 	})
 	if err != nil {
-		result.HttpError(c, err)
+		result.HttpBizErr(c, err)
 		return
 	}
 	result.HttpSuccess(c, res)
@@ -59,7 +56,7 @@ func loginByMobile(ctx context.Context, c *app.RequestContext) {
 func sendCaptcha(ctx context.Context, c *app.RequestContext) {
 	var req SendCaptchaReq
 	if err := c.BindAndValidate(&req); err != nil {
-		result.HttpError(c, xerr.ParamErr())
+		result.HttpParamErr(c)
 		return
 	}
 	res, err := rpc.UserClient.SendCaptcha(ctx, &user.SendCaptchaReq{
@@ -67,7 +64,7 @@ func sendCaptcha(ctx context.Context, c *app.RequestContext) {
 		SessionId: req.SessionId,
 	})
 	if err != nil {
-		result.HttpError(c, err)
+		result.HttpParamErr(c)
 		return
 	}
 	result.HttpSuccess(c, res.Success)

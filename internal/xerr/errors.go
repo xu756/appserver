@@ -2,6 +2,7 @@ package xerr
 
 import (
 	"fmt"
+	"github.com/cloudwego/kitex/pkg/kerrors"
 )
 
 /**
@@ -27,7 +28,7 @@ func GetMsg(code int32) string {
 }
 
 func NewErr(code int32, msg string) error {
-	return &CodeError{
+	return CodeError{
 		Code: code,
 		Msg:  msg,
 	}
@@ -41,14 +42,14 @@ func NewSprintfErr(code int32, format string, a ...interface{}) error {
 }
 
 func ErrMsg(code int32) error {
-	return &CodeError{
+	return CodeError{
 		Code: code,
 		Msg:  message[code],
 	}
 
 }
 func ParamErr() error {
-	return &CodeError{
+	return CodeError{
 		Code: Param,
 		Msg:  message[Param],
 	}
@@ -56,8 +57,16 @@ func ParamErr() error {
 }
 
 func SystemErr() error {
-	return &CodeError{
+	return CodeError{
 		Code: SystemErrCode,
 		Msg:  message[SystemErrCode],
 	}
+}
+
+func DbErr(code int32) error {
+	return kerrors.NewBizStatusError(code, message[code])
+	//return CodeError{
+	//	Code: code,
+	//	Msg:  message[code],
+	//}
 }

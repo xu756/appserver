@@ -19,9 +19,9 @@ func (m *customModel) FindUserByUsername(ctx context.Context, userName string) (
 	err = tx.Model(&model.User{}).Where("user_name = ?", userName).Limit(1).Find(&user).Error
 	switch {
 	case user.UserUuid == "":
-		return nil, xerr.ErrMsg(xerr.UserNotExist)
+		return nil, xerr.DbErr(xerr.UserNotExist)
 	case err != nil:
-		return nil, xerr.ErrMsg(xerr.DbFindErr)
+		return nil, xerr.DbErr(xerr.DbFindErr)
 	}
 	return user, nil
 }
@@ -32,9 +32,9 @@ func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (user
 	err = tx.Model(&model.User{}).Where("mobile = ?", mobile).Limit(1).Find(&user).Error
 	switch {
 	case user.UserUuid == "":
-		return nil, xerr.ErrMsg(xerr.UserMobileNotExist)
+		return nil, xerr.DbErr(xerr.UserMobileNotExist)
 	case err != nil:
-		return nil, xerr.ErrMsg(xerr.DbFindErr)
+		return nil, xerr.DbErr(xerr.DbFindErr)
 	}
 	return user, nil
 }
@@ -50,7 +50,7 @@ func (m *customModel) CreateUser(ctx context.Context, userName, mobile string, c
 	user.Editor = creator
 	err = tx.Create(&user).Error
 	if err != nil {
-		return xerr.ErrMsg(xerr.UserExist)
+		return xerr.DbErr(xerr.UserExist)
 	}
 	return nil
 }

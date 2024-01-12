@@ -3,7 +3,7 @@ package result
 import (
 	"errors"
 	"github.com/cloudwego/hertz/pkg/app"
-	"log"
+	"github.com/cloudwego/kitex/pkg/kerrors"
 	"net/http"
 	"server/internal/xerr"
 )
@@ -15,14 +15,24 @@ func HttpSuccess(c *app.RequestContext, resp interface{}) {
 }
 
 func HttpError(c *app.RequestContext, err error) {
-	log.Print(err)
 	var resErr xerr.CodeError
 	errors.As(err, &resErr)
 	c.JSON(http.StatusOK, errorRes(resErr.Code, resErr.Msg))
 	c.Abort()
 }
 
-func HttpErrorCode(c *app.RequestContext, code int32) {
-	c.JSON(http.StatusOK, errorRes(code, xerr.GetMsg(code)))
+func HttpBizErr(c *app.RequestContext, err error) {
+	if bizErr, isBizErr := kerrors.FromBizStatusError(err); isBizErr {
+		c.JSON(http.StatusOK, errorRes(bizErr.BizStatusCode(), bizErr.BizMessage()))
+		c.Abort()
+		return
+	}
+	c.JSON(http.StatusOK, errorRes(xerr.SystemErrCode, xerr.GetMsg(xerr.SystemErrCode)))
+	c.Abort()
+
+}
+
+func HttpParamErr(c *app.RequestContext) {
+	c.JSON(http.StatusOK, errorRes(xerr.Param, xerr.GetMsg(xerr.Param)))
 	c.Abort()
 }

@@ -1,13 +1,17 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"flag"
+	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/cloudwego/kitex/pkg/transmeta"
 	"github.com/cloudwego/kitex/server"
+	"log"
 	"net"
 	"server/cmd/user/hander"
 	"server/common/config"
-	"server/internal/xerr"
 	"server/kitex_gen/user/usersrv"
 )
 
@@ -22,11 +26,20 @@ func main() {
 	}
 	svr := usersrv.NewServer(hander.NewUserImpl(),
 		server.WithServiceAddr(addr),
-		server.WithErrorHandler(xerr.ServerErrorHandler),
+		server.WithErrorHandler(ServerErrorHandler),
+		server.WithMetaHandler(transmeta.ServerTTHeaderHandler),
 	)
-	klog.Debugf("【user】server start at %s", config.RunData.Addr.UserRpcAddr)
+	log.Printf("【user】server start at %s", config.RunData.Addr.UserRpcAddr)
 	err = svr.Run()
 	if err != nil {
 		klog.Fatal(err)
 	}
+}
+
+func ServerErrorHandler(ctx context.Context, err error) error {
+	if errors.Is(err, kerrors.ErrBiz) {
+		err = errors.Unwrap(err)
+	}
+	return err
+
 }
