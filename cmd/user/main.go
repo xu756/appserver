@@ -2,9 +2,7 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
-	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/transmeta"
 	"github.com/cloudwego/kitex/server"
@@ -37,9 +35,7 @@ func main() {
 }
 
 func ServerErrorHandler(ctx context.Context, err error) error {
-	if errors.Is(err, kerrors.ErrBiz) {
-		err = errors.Unwrap(err)
-	}
+	log.Print("ser")
 	return err
 
 }

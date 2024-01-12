@@ -4,11 +4,9 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
-	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/cloudwego/kitex/pkg/transmeta"
 	"log"
 	"server/common/config"
-	"server/internal/xerr"
 	"server/kitex_gen/user/usersrv"
 )
 
@@ -29,10 +27,6 @@ func InitUserClient(destService string) {
 
 func ClientErrorHandler(ctx context.Context, err error) error {
 	// todo 错误统一处理
-	//bizErr, isBizErr := kerrors.FromBizStatusError(err)
-	if bizErr, isBizErr := kerrors.FromBizStatusError(err); isBizErr {
-		log.Print(bizErr.Error())
-		return xerr.NewErr(bizErr.BizStatusCode(), bizErr.BizMessage())
-	}
+	log.Print("client")
 	return err
 }
