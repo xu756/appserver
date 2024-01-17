@@ -13,7 +13,6 @@ func LoginRouter(r *route.RouterGroup) {
 	r.POST("/account", loginByPassword)
 	r.POST("/mobile", loginByMobile)
 	r.POST("/captcha", sendCaptcha)
-
 }
 
 func loginByPassword(ctx context.Context, c *app.RequestContext) {

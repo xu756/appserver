@@ -7,6 +7,7 @@ type Config struct {
 	RedisConfig RedisConfig `yaml:"redisConfig"`
 	JwtConfig   JwtConfig   `yaml:"jwtConfig"`
 	EmailConfig EmailConfig `yaml:"emailConfig"`
+	MqUrl       string      `yaml:"mqUrl"`
 }
 
 // Addr 服务地址 运行地址
