@@ -63,6 +63,16 @@ func CreateTable(db *gorm.DB) error {
 		log.Printf("【 创建表失败 %s 】 ", "user_role")
 		return err
 	}
+	err = db.AutoMigrate(&model.Group{})
+	if err != nil {
+		log.Printf("【 创建表失败 %s 】 ", "group")
+		return err
+	}
+	err = db.AutoMigrate(&model.UserGroup{})
+	if err != nil {
+		log.Printf("【 创建表失败 %s 】 ", "user_group")
+		return err
+	}
 	return nil
 }
 

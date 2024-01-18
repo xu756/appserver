@@ -13,18 +13,18 @@ type Role struct {
 	Intro    string `gorm:"comment:角色介绍" json:"intro"`
 }
 
-func (u *Role) TableName() string {
+func (r *Role) TableName() string {
 	return "role"
 }
 
-func (u *Role) BeforeCreate(tx *gorm.DB) (err error) {
-	u.RoleUuid = uuid.NewString()
-	u.CreatedAtInt64 = tx.NowFunc().Unix()
-	u.UpdatedAtInt64 = tx.NowFunc().Unix()
+func (r *Role) BeforeCreate(tx *gorm.DB) (err error) {
+	r.RoleUuid = uuid.NewString()
+	r.CreatedAtInt64 = tx.NowFunc().Unix()
+	r.UpdatedAtInt64 = tx.NowFunc().Unix()
 	return
 }
 
-func (u *Role) BeforeUpdate(tx *gorm.DB) (err error) {
-	u.UpdatedAtInt64 = tx.NowFunc().Unix()
+func (r *Role) BeforeUpdate(tx *gorm.DB) (err error) {
+	r.UpdatedAtInt64 = tx.NowFunc().Unix()
 	return
 }
