@@ -1,110 +1,41 @@
 package db
 
 import (
+	"context"
 	"fmt"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	_ "github.com/lib/pq"
 	"log"
 	"server/common/config"
-	"server/common/model"
-	"time"
+	"server/ent"
+	"server/ent/migrate"
 )
 
 type customModel struct {
-	Db *gorm.DB
+	client *ent.Client
 }
 
 func NewModel() Model {
-	dsn := "host=%s user=%s password=%s dbname=%s port=%d  TimeZone=Asia/Shanghai"
+	dsn := "host=%s user=%s password=%s dbname=%s port=%d  TimeZone=Asia/Shanghai sslmode=disable"
 	c := config.RunData.DbConfig
 	dsn = fmt.Sprintf(dsn, c.Addr, c.Username, c.Password, c.DbName, c.Port)
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  dsn,
-		PreferSimpleProtocol: true,
-	}), &gorm.Config{
-		SkipDefaultTransaction: true,
-	})
+	client, err := ent.Open("postgres", dsn)
 	if err != nil {
 		log.Panic(err)
 	}
-	sqlDb, err := db.DB()
+	err = CreateTable(client)
 	if err != nil {
 		log.Panic(err)
-	}
-	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
-	sqlDb.SetMaxIdleConns(10)
-	// SetMaxOpenConns 设置打开数据库连接的最大数量。
-	sqlDb.SetMaxOpenConns(100)
-	// SetConnMaxLifetime 设置了连接可复用的最大时间。
-	sqlDb.SetConnMaxLifetime(time.Second)
-	log.Print("【 数据库连接成功 】")
-	err = CreateTable(db)
-	if err != nil {
-		panic(err)
 	}
 	return &customModel{
-		Db: db,
+		client: client,
 	}
 }
 
-func CreateTable(db *gorm.DB) error {
-	err := db.AutoMigrate(&model.User{})
-	if err != nil {
-		log.Printf("【 创建表失败 %s 】 ", "user")
-		return err
-	}
-	err = db.AutoMigrate(&model.Role{})
-	if err != nil {
-		log.Printf("【 创建表失败 %s 】 ", "role")
-		return err
-	}
-	err = db.AutoMigrate(&model.UserRole{})
-	if err != nil {
-		log.Printf("【 创建表失败 %s 】 ", "user_role")
-		return err
-	}
-	err = db.AutoMigrate(&model.Group{})
-	if err != nil {
-		log.Printf("【 创建表失败 %s 】 ", "group")
-		return err
-	}
-	err = db.AutoMigrate(&model.UserGroup{})
-	if err != nil {
-		log.Printf("【 创建表失败 %s 】 ", "user_group")
-		return err
-	}
-	return nil
-}
-
-func TestModel() Model {
-	dsn := "host=%s user=%s password=%s dbname=%s port=%d  TimeZone=Asia/Shanghai"
-	c := config.RunData.DbConfig
-	dsn = fmt.Sprintf(dsn, c.Addr, c.Username, c.Password, c.DbName, c.Port)
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  dsn,
-		PreferSimpleProtocol: true,
-	}), &gorm.Config{
-		SkipDefaultTransaction: true,
-	})
-	if err != nil {
-		log.Panic(err)
-	}
-	sqlDb, err := db.DB()
-	if err != nil {
-		log.Panic(err)
-	}
-	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
-	sqlDb.SetMaxIdleConns(10)
-	// SetMaxOpenConns 设置打开数据库连接的最大数量。
-	sqlDb.SetMaxOpenConns(100)
-	// SetConnMaxLifetime 设置了连接可复用的最大时间。
-	sqlDb.SetConnMaxLifetime(time.Second)
-	log.Print("【 数据库连接成功 】")
-	//err = CreateTable(db)
-	//if err != nil {
-	//	panic(err)
-	//}
-	return &customModel{
-		Db: db,
-	}
+func CreateTable(client *ent.Client) error {
+	err := client.Schema.Create(
+		context.Background(),
+		migrate.WithGlobalUniqueID(true),
+		migrate.WithDropIndex(true),
+	)
+	return err
 }
