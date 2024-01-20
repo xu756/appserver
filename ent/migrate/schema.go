@@ -15,7 +15,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "deleted", Type: field.TypeBool, Default: false},
 		{Name: "creator", Type: field.TypeInt64, Default: 0},
-		{Name: "editor", Type: field.TypeInt64, Default: 0},
+		{Name: "editor", Type: field.TypeInt64, Default: 1},
 		{Name: "version", Type: field.TypeInt64, Default: 0},
 		{Name: "uuid", Type: field.TypeUUID, Unique: true},
 		{Name: "parent_id", Type: field.TypeInt64, Default: 0},
@@ -36,7 +36,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "deleted", Type: field.TypeBool, Default: false},
 		{Name: "creator", Type: field.TypeInt64, Default: 0},
-		{Name: "editor", Type: field.TypeInt64, Default: 0},
+		{Name: "editor", Type: field.TypeInt64, Default: 1},
 		{Name: "version", Type: field.TypeInt64, Default: 0},
 		{Name: "parent_id", Type: field.TypeInt64, Default: 0},
 		{Name: "level", Type: field.TypeInt64, Default: 0},
@@ -56,7 +56,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "deleted", Type: field.TypeBool, Default: false},
 		{Name: "creator", Type: field.TypeInt64, Default: 0},
-		{Name: "editor", Type: field.TypeInt64, Default: 0},
+		{Name: "editor", Type: field.TypeInt64, Default: 1},
 		{Name: "version", Type: field.TypeInt64, Default: 0},
 		{Name: "uuid", Type: field.TypeUUID, Unique: true},
 		{Name: "username", Type: field.TypeString},
@@ -69,6 +69,18 @@ var (
 		Name:       "users",
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "user_uuid",
+				Unique:  true,
+				Columns: []*schema.Column{UsersColumns[7]},
+			},
+			{
+				Name:    "user_username_mobile",
+				Unique:  false,
+				Columns: []*schema.Column{UsersColumns[8], UsersColumns[10]},
+			},
+		},
 	}
 	// UserGroupsColumns holds the columns for the "user_groups" table.
 	UserGroupsColumns = []*schema.Column{
@@ -77,7 +89,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "deleted", Type: field.TypeBool, Default: false},
 		{Name: "creator", Type: field.TypeInt64, Default: 0},
-		{Name: "editor", Type: field.TypeInt64, Default: 0},
+		{Name: "editor", Type: field.TypeInt64, Default: 1},
 		{Name: "version", Type: field.TypeInt64, Default: 0},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "group_id", Type: field.TypeInt64},
@@ -95,7 +107,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "deleted", Type: field.TypeBool, Default: false},
 		{Name: "creator", Type: field.TypeInt64, Default: 0},
-		{Name: "editor", Type: field.TypeInt64, Default: 0},
+		{Name: "editor", Type: field.TypeInt64, Default: 1},
 		{Name: "version", Type: field.TypeInt64, Default: 0},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "role_id", Type: field.TypeInt64},

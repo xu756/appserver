@@ -4,13 +4,12 @@ package xerr
 const (
 	OK = 200 + iota
 	SystemErrCode
-	DbErrCode
-	DbFindErr
-	DbCreateErr
-	DbUpdateErr
-	DbDeleteErr
+	DbFind
+	DbCreate
+	DbUpdate
+	DbDelete
 	Param
-	DbConnectErr
+	DbConnect
 	RedisConnectErr
 	RoleErr
 )

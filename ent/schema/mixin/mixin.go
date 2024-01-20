@@ -20,7 +20,7 @@ func (Mixin) Fields() []ent.Field {
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now).Comment("更新时间"),
 		field.Bool("deleted").Default(false).Comment("删除状态"),
 		field.Int64("creator").Default(0).Comment("创建人"),
-		field.Int64("editor").Default(0).Comment("修改人"),
+		field.Int64("editor").Default(1).Comment("修改人"),
 		field.Int64("version").Default(0).Comment("版本号"),
 	}
 

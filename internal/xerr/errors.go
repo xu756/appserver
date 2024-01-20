@@ -24,21 +24,6 @@ func (e CodeError) GetCode() int32 {
 
 func GetMsg(code int32) string {
 	return message[code]
-
-}
-
-func NewErr(code int32, msg string) error {
-	return CodeError{
-		Code: code,
-		Msg:  msg,
-	}
-}
-
-func NewSprintfErr(code int32, format string, a ...interface{}) error {
-	return CodeError{
-		Code: code,
-		Msg:  fmt.Sprintf(format, a...),
-	}
 }
 
 func ErrMsg(code int32) error {
@@ -63,10 +48,43 @@ func SystemErr() error {
 	}
 }
 
-func DbErr(code int32) error {
+func DbErr(code int32, msg string) error {
 	return kerrors.NewBizStatusError(code, message[code])
+}
+
+func DbConnectErr() error {
+	return DbErr(DbConnect, message[DbConnect])
+}
+
+func DbFindErr() error {
 	//return CodeError{
-	//	Code: code,
-	//	Msg:  message[code],
+	//	Code: DbFind,
+	//	Msg:  message[DbFind],
 	//}
+	return DbErr(DbFind, message[DbFind])
+}
+
+func DbCreateErr() error {
+	//return CodeError{
+	//	Code: DbCreate,
+	//	Msg:  message[DbCreate],
+	//}
+	return DbErr(DbCreate, message[DbCreate])
+}
+
+func DbUpdateErr() error {
+	//return CodeError{
+	//	Code: DbUpdate,
+	//	Msg:  message[DbUpdate],
+	//}
+	return DbErr(DbUpdate, message[DbUpdate])
+}
+
+func DbDeleteErr() error {
+	//return CodeError{
+	//	Code: DbDelete,
+	//	Msg:  message[DbDelete],
+	//}
+	return DbErr(DbDelete, message[DbDelete])
+
 }
