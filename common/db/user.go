@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"log"
 	"server/ent"
 	"server/ent/user"
 	"server/internal/xerr"
@@ -28,7 +29,7 @@ func (m *customModel) FindUserByUsername(ctx context.Context, username string) (
 	case err != nil:
 		return nil, xerr.DbFindErr()
 	default:
-		return userInfo, nil
+		return userInfo, tx.Commit()
 	}
 }
 
@@ -46,7 +47,7 @@ func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (user
 	case err != nil:
 		return nil, xerr.DbFindErr()
 	default:
-		return userInfo, nil
+		return userInfo, tx.Commit()
 	}
 }
 
@@ -54,6 +55,7 @@ func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (user
 func (m *customModel) CreateUser(ctx context.Context, username, password, mobile string, creator int64) (userInfo *ent.User, err error) {
 	tx, err := m.client.Tx(ctx)
 	if err != nil {
+		log.Print(err)
 		return nil, err
 	}
 	userInfo, err = tx.User.Create().
@@ -64,11 +66,11 @@ func (m *customModel) CreateUser(ctx context.Context, username, password, mobile
 		SetEditor(creator).
 		SetVersion(1).
 		Save(ctx)
-	err = tx.Commit()
 	if err != nil {
+		log.Print(err)
 		return nil, err
 	}
-	return userInfo, err
+	return userInfo, tx.Commit()
 }
 
 // UpdateUserAvatar 更新用户头像
@@ -89,9 +91,5 @@ func (m *customModel) UpdateUserAvatar(ctx context.Context, uuid string, avatar 
 	if err != nil {
 		return nil, err
 	}
-	err = tx.Commit()
-	if err != nil {
-		return nil, err
-	}
-	return userInfo, err
+	return userInfo, tx.Commit()
 }
