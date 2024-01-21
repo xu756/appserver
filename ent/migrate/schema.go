@@ -17,7 +17,7 @@ var (
 		{Name: "creator", Type: field.TypeInt64, Default: 0},
 		{Name: "editor", Type: field.TypeInt64, Default: 1},
 		{Name: "version", Type: field.TypeInt64, Default: 0},
-		{Name: "uuid", Type: field.TypeUUID, Unique: true},
+		{Name: "uuid", Type: field.TypeString, Unique: true},
 		{Name: "parent_id", Type: field.TypeInt64, Default: 0},
 		{Name: "level", Type: field.TypeInt64, Default: 0},
 		{Name: "name", Type: field.TypeString},
@@ -58,10 +58,10 @@ var (
 		{Name: "creator", Type: field.TypeInt64, Default: 0},
 		{Name: "editor", Type: field.TypeInt64, Default: 1},
 		{Name: "version", Type: field.TypeInt64, Default: 0},
-		{Name: "uuid", Type: field.TypeUUID, Unique: true},
+		{Name: "uuid", Type: field.TypeString, Unique: true},
 		{Name: "username", Type: field.TypeString},
 		{Name: "password", Type: field.TypeString},
-		{Name: "mobile", Type: field.TypeString},
+		{Name: "mobile", Type: field.TypeString, Unique: true},
 		{Name: "avatar", Type: field.TypeString, Default: "https://cos.imlogic.cn/appadmin/images/avatar.jpeg"},
 	}
 	// UsersTable holds the schema information for the "users" table.

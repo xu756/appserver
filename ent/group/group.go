@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
 )
 
 const (
@@ -82,7 +81,7 @@ var (
 	// DefaultVersion holds the default value on creation for the "version" field.
 	DefaultVersion int64
 	// DefaultUUID holds the default value on creation for the "uuid" field.
-	DefaultUUID func() uuid.UUID
+	DefaultUUID func() string
 	// DefaultParentID holds the default value on creation for the "parent_id" field.
 	DefaultParentID int64
 	// DefaultLevel holds the default value on creation for the "level" field.

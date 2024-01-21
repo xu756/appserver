@@ -11,6 +11,7 @@ type dbUserModel interface {
 	FindUserByUsername(ctx context.Context, username string) (userInfo *ent.User, err error)
 	FindUserByMobile(ctx context.Context, mobile string) (userInfo *ent.User, err error)
 	CreateUser(ctx context.Context, username, password, mobile string, creator int64) (userInfo *ent.User, err error)
+	UpdateUserAvatar(ctx context.Context, uuid string, avatar string, editor int64) (userInfo *ent.User, err error)
 }
 
 // FindUserByUsername 根据用户名查找用户
@@ -63,6 +64,31 @@ func (m *customModel) CreateUser(ctx context.Context, username, password, mobile
 		SetEditor(creator).
 		SetVersion(1).
 		Save(ctx)
+	err = tx.Commit()
+	if err != nil {
+		return nil, err
+	}
+	return userInfo, err
+}
+
+// UpdateUserAvatar 更新用户头像
+func (m *customModel) UpdateUserAvatar(ctx context.Context, uuid string, avatar string, editor int64) (userInfo *ent.User, err error) {
+	tx, err := m.client.Tx(ctx)
+	if err != nil {
+		return nil, err
+	}
+	id, err := tx.User.Update().
+		SetAvatar(avatar).
+		SetEditor(editor).
+		Where(user.UUID(uuid)).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	userInfo, err = tx.User.Get(ctx, int64(id))
+	if err != nil {
+		return nil, err
+	}
 	err = tx.Commit()
 	if err != nil {
 		return nil, err

@@ -17,7 +17,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
 )
 
 const (
@@ -51,7 +50,7 @@ type GroupMutation struct {
 	addeditor     *int64
 	version       *int64
 	addversion    *int64
-	uuid          *uuid.UUID
+	uuid          *string
 	parent_id     *int64
 	addparent_id  *int64
 	level         *int64
@@ -445,12 +444,12 @@ func (m *GroupMutation) ResetVersion() {
 }
 
 // SetUUID sets the "uuid" field.
-func (m *GroupMutation) SetUUID(u uuid.UUID) {
-	m.uuid = &u
+func (m *GroupMutation) SetUUID(s string) {
+	m.uuid = &s
 }
 
 // UUID returns the value of the "uuid" field in the mutation.
-func (m *GroupMutation) UUID() (r uuid.UUID, exists bool) {
+func (m *GroupMutation) UUID() (r string, exists bool) {
 	v := m.uuid
 	if v == nil {
 		return
@@ -461,7 +460,7 @@ func (m *GroupMutation) UUID() (r uuid.UUID, exists bool) {
 // OldUUID returns the old "uuid" field's value of the Group entity.
 // If the Group object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GroupMutation) OldUUID(ctx context.Context) (v uuid.UUID, err error) {
+func (m *GroupMutation) OldUUID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUUID is only allowed on UpdateOne operations")
 	}
@@ -845,7 +844,7 @@ func (m *GroupMutation) SetField(name string, value ent.Value) error {
 		m.SetVersion(v)
 		return nil
 	case group.FieldUUID:
-		v, ok := value.(uuid.UUID)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2077,7 +2076,7 @@ type UserMutation struct {
 	addeditor     *int64
 	version       *int64
 	addversion    *int64
-	uuid          *uuid.UUID
+	uuid          *string
 	username      *string
 	password      *string
 	mobile        *string
@@ -2469,12 +2468,12 @@ func (m *UserMutation) ResetVersion() {
 }
 
 // SetUUID sets the "uuid" field.
-func (m *UserMutation) SetUUID(u uuid.UUID) {
-	m.uuid = &u
+func (m *UserMutation) SetUUID(s string) {
+	m.uuid = &s
 }
 
 // UUID returns the value of the "uuid" field in the mutation.
-func (m *UserMutation) UUID() (r uuid.UUID, exists bool) {
+func (m *UserMutation) UUID() (r string, exists bool) {
 	v := m.uuid
 	if v == nil {
 		return
@@ -2485,7 +2484,7 @@ func (m *UserMutation) UUID() (r uuid.UUID, exists bool) {
 // OldUUID returns the old "uuid" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldUUID(ctx context.Context) (v uuid.UUID, err error) {
+func (m *UserMutation) OldUUID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUUID is only allowed on UpdateOne operations")
 	}
@@ -2829,7 +2828,7 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		m.SetVersion(v)
 		return nil
 	case user.FieldUUID:
-		v, ok := value.(uuid.UUID)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

@@ -10,8 +10,6 @@ import (
 	"server/ent/usergroup"
 	"server/ent/userrole"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -52,7 +50,7 @@ func init() {
 	// groupDescUUID is the schema descriptor for uuid field.
 	groupDescUUID := groupFields[0].Descriptor()
 	// group.DefaultUUID holds the default value on creation for the uuid field.
-	group.DefaultUUID = groupDescUUID.Default.(func() uuid.UUID)
+	group.DefaultUUID = groupDescUUID.Default.(func() string)
 	// groupDescParentID is the schema descriptor for parent_id field.
 	groupDescParentID := groupFields[1].Descriptor()
 	// group.DefaultParentID holds the default value on creation for the parent_id field.
@@ -142,7 +140,7 @@ func init() {
 	// userDescUUID is the schema descriptor for uuid field.
 	userDescUUID := userFields[0].Descriptor()
 	// user.DefaultUUID holds the default value on creation for the uuid field.
-	user.DefaultUUID = userDescUUID.Default.(func() uuid.UUID)
+	user.DefaultUUID = userDescUUID.Default.(func() string)
 	// userDescAvatar is the schema descriptor for avatar field.
 	userDescAvatar := userFields[4].Descriptor()
 	// user.DefaultAvatar holds the default value on creation for the avatar field.

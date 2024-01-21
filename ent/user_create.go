@@ -11,7 +11,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -106,15 +105,15 @@ func (uc *UserCreate) SetNillableVersion(i *int64) *UserCreate {
 }
 
 // SetUUID sets the "uuid" field.
-func (uc *UserCreate) SetUUID(u uuid.UUID) *UserCreate {
-	uc.mutation.SetUUID(u)
+func (uc *UserCreate) SetUUID(s string) *UserCreate {
+	uc.mutation.SetUUID(s)
 	return uc
 }
 
 // SetNillableUUID sets the "uuid" field if the given value is not nil.
-func (uc *UserCreate) SetNillableUUID(u *uuid.UUID) *UserCreate {
-	if u != nil {
-		uc.SetUUID(*u)
+func (uc *UserCreate) SetNillableUUID(s *string) *UserCreate {
+	if s != nil {
+		uc.SetUUID(*s)
 	}
 	return uc
 }
@@ -318,7 +317,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.Version = value
 	}
 	if value, ok := uc.mutation.UUID(); ok {
-		_spec.SetField(user.FieldUUID, field.TypeUUID, value)
+		_spec.SetField(user.FieldUUID, field.TypeString, value)
 		_node.UUID = value
 	}
 	if value, ok := uc.mutation.Username(); ok {

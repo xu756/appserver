@@ -13,10 +13,10 @@ func TestCustomModel_CreateUser(t *testing.T) {
 	if m == nil {
 		t.Error("NewModel error")
 	}
-	user, err := m.CreateUser(context.TODO(), "test", "test", "12345678901", 0)
+	user, err := m.CreateUser(context.TODO(), "test", "test", "12345678101", 0)
 	if err != nil {
 		t.Error(err)
-		t.Error(ent.IsValidationError(err))
+		t.Error(ent.IsConstraintError(err))
 		return
 	}
 	t.Log(user)

@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
 )
 
 // User is the model entity for the User schema.
@@ -32,7 +31,7 @@ type User struct {
 	// 版本号
 	Version int64 `json:"version,omitempty"`
 	// 用户uuid
-	UUID uuid.UUID `json:"uuid,omitempty"`
+	UUID string `json:"uuid,omitempty"`
 	// 姓名
 	Username string `json:"username,omitempty"`
 	// 密码
@@ -53,12 +52,10 @@ func (*User) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case user.FieldID, user.FieldCreator, user.FieldEditor, user.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case user.FieldUsername, user.FieldPassword, user.FieldMobile, user.FieldAvatar:
+		case user.FieldUUID, user.FieldUsername, user.FieldPassword, user.FieldMobile, user.FieldAvatar:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case user.FieldUUID:
-			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -117,10 +114,10 @@ func (u *User) assignValues(columns []string, values []any) error {
 				u.Version = value.Int64
 			}
 		case user.FieldUUID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field uuid", values[i])
-			} else if value != nil {
-				u.UUID = *value
+			} else if value.Valid {
+				u.UUID = value.String
 			}
 		case user.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -201,7 +198,7 @@ func (u *User) String() string {
 	builder.WriteString(fmt.Sprintf("%v", u.Version))
 	builder.WriteString(", ")
 	builder.WriteString("uuid=")
-	builder.WriteString(fmt.Sprintf("%v", u.UUID))
+	builder.WriteString(u.UUID)
 	builder.WriteString(", ")
 	builder.WriteString("username=")
 	builder.WriteString(u.Username)

@@ -23,11 +23,13 @@ func (User) Mixin() []ent.Mixin {
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("uuid", uuid.UUID{}).Default(uuid.New).
+		field.String("uuid").DefaultFunc(func() string {
+			return uuid.New().String()
+		}).
 			Unique().Immutable().Comment("用户uuid"),
 		field.String("username").Comment("姓名"),
 		field.String("password").Comment("密码"),
-		field.String("mobile").Comment("手机号"),
+		field.String("mobile").Unique().Comment("手机号"),
 		field.String("avatar").Comment("头像").Default("https://cos.imlogic.cn/appadmin/images/avatar.jpeg"),
 	}
 }

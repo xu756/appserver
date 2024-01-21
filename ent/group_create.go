@@ -11,7 +11,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
 )
 
 // GroupCreate is the builder for creating a Group entity.
@@ -106,15 +105,15 @@ func (gc *GroupCreate) SetNillableVersion(i *int64) *GroupCreate {
 }
 
 // SetUUID sets the "uuid" field.
-func (gc *GroupCreate) SetUUID(u uuid.UUID) *GroupCreate {
-	gc.mutation.SetUUID(u)
+func (gc *GroupCreate) SetUUID(s string) *GroupCreate {
+	gc.mutation.SetUUID(s)
 	return gc
 }
 
 // SetNillableUUID sets the "uuid" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableUUID(u *uuid.UUID) *GroupCreate {
-	if u != nil {
-		gc.SetUUID(*u)
+func (gc *GroupCreate) SetNillableUUID(s *string) *GroupCreate {
+	if s != nil {
+		gc.SetUUID(*s)
 	}
 	return gc
 }
@@ -335,7 +334,7 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 		_node.Version = value
 	}
 	if value, ok := gc.mutation.UUID(); ok {
-		_spec.SetField(group.FieldUUID, field.TypeUUID, value)
+		_spec.SetField(group.FieldUUID, field.TypeString, value)
 		_node.UUID = value
 	}
 	if value, ok := gc.mutation.ParentID(); ok {

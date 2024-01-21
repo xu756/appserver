@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
 )
 
 // Group is the model entity for the Group schema.
@@ -32,7 +31,7 @@ type Group struct {
 	// 版本号
 	Version int64 `json:"version,omitempty"`
 	// 组uuid
-	UUID uuid.UUID `json:"uuid,omitempty"`
+	UUID string `json:"uuid,omitempty"`
 	// 父组id
 	ParentID int64 `json:"parent_id,omitempty"`
 	// 组层级
@@ -53,12 +52,10 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case group.FieldID, group.FieldCreator, group.FieldEditor, group.FieldVersion, group.FieldParentID, group.FieldLevel:
 			values[i] = new(sql.NullInt64)
-		case group.FieldName, group.FieldIntro:
+		case group.FieldUUID, group.FieldName, group.FieldIntro:
 			values[i] = new(sql.NullString)
 		case group.FieldCreatedAt, group.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case group.FieldUUID:
-			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -117,10 +114,10 @@ func (gr *Group) assignValues(columns []string, values []any) error {
 				gr.Version = value.Int64
 			}
 		case group.FieldUUID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field uuid", values[i])
-			} else if value != nil {
-				gr.UUID = *value
+			} else if value.Valid {
+				gr.UUID = value.String
 			}
 		case group.FieldParentID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -201,7 +198,7 @@ func (gr *Group) String() string {
 	builder.WriteString(fmt.Sprintf("%v", gr.Version))
 	builder.WriteString(", ")
 	builder.WriteString("uuid=")
-	builder.WriteString(fmt.Sprintf("%v", gr.UUID))
+	builder.WriteString(gr.UUID)
 	builder.WriteString(", ")
 	builder.WriteString("parent_id=")
 	builder.WriteString(fmt.Sprintf("%v", gr.ParentID))

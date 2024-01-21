@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
@@ -86,7 +85,7 @@ func Version(v int64) predicate.Group {
 }
 
 // UUID applies equality check predicate on the "uuid" field. It's identical to UUIDEQ.
-func UUID(v uuid.UUID) predicate.Group {
+func UUID(v string) predicate.Group {
 	return predicate.Group(sql.FieldEQ(FieldUUID, v))
 }
 
@@ -321,43 +320,68 @@ func VersionLTE(v int64) predicate.Group {
 }
 
 // UUIDEQ applies the EQ predicate on the "uuid" field.
-func UUIDEQ(v uuid.UUID) predicate.Group {
+func UUIDEQ(v string) predicate.Group {
 	return predicate.Group(sql.FieldEQ(FieldUUID, v))
 }
 
 // UUIDNEQ applies the NEQ predicate on the "uuid" field.
-func UUIDNEQ(v uuid.UUID) predicate.Group {
+func UUIDNEQ(v string) predicate.Group {
 	return predicate.Group(sql.FieldNEQ(FieldUUID, v))
 }
 
 // UUIDIn applies the In predicate on the "uuid" field.
-func UUIDIn(vs ...uuid.UUID) predicate.Group {
+func UUIDIn(vs ...string) predicate.Group {
 	return predicate.Group(sql.FieldIn(FieldUUID, vs...))
 }
 
 // UUIDNotIn applies the NotIn predicate on the "uuid" field.
-func UUIDNotIn(vs ...uuid.UUID) predicate.Group {
+func UUIDNotIn(vs ...string) predicate.Group {
 	return predicate.Group(sql.FieldNotIn(FieldUUID, vs...))
 }
 
 // UUIDGT applies the GT predicate on the "uuid" field.
-func UUIDGT(v uuid.UUID) predicate.Group {
+func UUIDGT(v string) predicate.Group {
 	return predicate.Group(sql.FieldGT(FieldUUID, v))
 }
 
 // UUIDGTE applies the GTE predicate on the "uuid" field.
-func UUIDGTE(v uuid.UUID) predicate.Group {
+func UUIDGTE(v string) predicate.Group {
 	return predicate.Group(sql.FieldGTE(FieldUUID, v))
 }
 
 // UUIDLT applies the LT predicate on the "uuid" field.
-func UUIDLT(v uuid.UUID) predicate.Group {
+func UUIDLT(v string) predicate.Group {
 	return predicate.Group(sql.FieldLT(FieldUUID, v))
 }
 
 // UUIDLTE applies the LTE predicate on the "uuid" field.
-func UUIDLTE(v uuid.UUID) predicate.Group {
+func UUIDLTE(v string) predicate.Group {
 	return predicate.Group(sql.FieldLTE(FieldUUID, v))
+}
+
+// UUIDContains applies the Contains predicate on the "uuid" field.
+func UUIDContains(v string) predicate.Group {
+	return predicate.Group(sql.FieldContains(FieldUUID, v))
+}
+
+// UUIDHasPrefix applies the HasPrefix predicate on the "uuid" field.
+func UUIDHasPrefix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasPrefix(FieldUUID, v))
+}
+
+// UUIDHasSuffix applies the HasSuffix predicate on the "uuid" field.
+func UUIDHasSuffix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasSuffix(FieldUUID, v))
+}
+
+// UUIDEqualFold applies the EqualFold predicate on the "uuid" field.
+func UUIDEqualFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldEqualFold(FieldUUID, v))
+}
+
+// UUIDContainsFold applies the ContainsFold predicate on the "uuid" field.
+func UUIDContainsFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldContainsFold(FieldUUID, v))
 }
 
 // ParentIDEQ applies the EQ predicate on the "parent_id" field.

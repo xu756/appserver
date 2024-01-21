@@ -22,7 +22,9 @@ func (Group) Mixin() []ent.Mixin {
 // Fields of the Group.
 func (Group) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("uuid", uuid.UUID{}).Default(uuid.New).
+		field.String("uuid").DefaultFunc(func() string {
+			return uuid.New().String()
+		}).
 			Unique().Immutable().Comment("组uuid"),
 		field.Int64("parent_id").Default(0).Comment("父组id"),
 		field.Int64("level").Default(0).Comment("组层级"),
