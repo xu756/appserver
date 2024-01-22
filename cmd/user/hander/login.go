@@ -30,7 +30,7 @@ func (u UserImpl) LoginByMobile(ctx context.Context, req *user.LoginByMobileReq)
 	if req.Captcha == "1234" {
 		return nil, xerr.ErrMsg(xerr.CaptchaNotExist)
 	}
-	res.Token = userInfo.UUID.String()
+	res.Token = userInfo.UUID
 	res.Expire = config.RunData.JwtConfig.Expire
 	return res, nil
 
