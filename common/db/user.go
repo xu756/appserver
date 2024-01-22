@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"log"
 	"server/ent"
 	"server/ent/user"
 	"server/internal/xerr"
@@ -19,7 +18,7 @@ type dbUserModel interface {
 func (m *customModel) FindUserByUsername(ctx context.Context, username string) (userInfo *ent.User, err error) {
 	tx, err := m.client.Tx(ctx)
 	if err != nil {
-		return nil, err
+		return nil, xerr.DbConnectErr()
 	}
 	userInfo, err = tx.User.Query().
 		Where(user.Username(username), user.Deleted(false)).First(ctx)
@@ -33,11 +32,25 @@ func (m *customModel) FindUserByUsername(ctx context.Context, username string) (
 	}
 }
 
+// FindUserByUUID 根据UUID查找用户
+func FindUserByUUID(tx *ent.Tx, uuid string) (userInfo *ent.User, err error) {
+	userInfo, err = tx.User.Query().
+		Where(user.UUID(uuid), user.Deleted(false)).First(context.Background())
+	switch {
+	case ent.IsNotFound(err):
+		return nil, xerr.ErrMsg(xerr.UserNotExist)
+	case err != nil:
+		return nil, xerr.DbFindErr()
+	default:
+		return userInfo, nil
+	}
+}
+
 // FindUserByMobile 根据手机号查找用户
 func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (userInfo *ent.User, err error) {
 	tx, err := m.client.Tx(ctx)
 	if err != nil {
-		return nil, err
+		return nil, xerr.DbConnectErr()
 	}
 	userInfo, err = tx.User.Query().
 		Where(user.Mobile(mobile), user.Deleted(false)).First(ctx)
@@ -55,8 +68,7 @@ func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (user
 func (m *customModel) CreateUser(ctx context.Context, username, password, mobile string, creator int64) (userInfo *ent.User, err error) {
 	tx, err := m.client.Tx(ctx)
 	if err != nil {
-		log.Print(err)
-		return nil, err
+		return nil, xerr.DbConnectErr()
 	}
 	userInfo, err = tx.User.Create().
 		SetUsername(username).
@@ -66,30 +78,38 @@ func (m *customModel) CreateUser(ctx context.Context, username, password, mobile
 		SetEditor(creator).
 		SetVersion(1).
 		Save(ctx)
-	if err != nil {
-		log.Print(err)
-		return nil, err
+	switch {
+	case ent.IsConstraintError(err):
+		return nil, xerr.ErrMsg(xerr.UserExist)
+	case err != nil:
+		return nil, xerr.DbCreateErr()
+	default:
+		return userInfo, tx.Commit()
 	}
-	return userInfo, tx.Commit()
 }
 
 // UpdateUserAvatar 更新用户头像
 func (m *customModel) UpdateUserAvatar(ctx context.Context, uuid string, avatar string, editor int64) (userInfo *ent.User, err error) {
 	tx, err := m.client.Tx(ctx)
 	if err != nil {
-		return nil, err
+		return nil, xerr.DbConnectErr()
 	}
-	id, err := tx.User.Update().
-		SetAvatar(avatar).
-		SetEditor(editor).
-		Where(user.UUID(uuid)).
-		Save(ctx)
+	User, err := FindUserByUUID(tx, uuid)
 	if err != nil {
 		return nil, err
 	}
-	userInfo, err = tx.User.Get(ctx, int64(id))
-	if err != nil {
-		return nil, err
+	if User.Avatar != avatar {
+		User, err := tx.User.UpdateOne(User).
+			SetAvatar(avatar).
+			SetEditor(editor).
+			SetVersion(User.Version + 1).
+			Where(user.UUID(uuid)).
+			Save(ctx)
+		if err != nil {
+			return nil, xerr.DbUpdateErr()
+		}
+		return User, tx.Commit()
+	} else {
+		return User, tx.Commit()
 	}
-	return userInfo, tx.Commit()
 }
