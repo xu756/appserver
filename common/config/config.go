@@ -13,6 +13,7 @@ type Config struct {
 // Addr 服务地址 运行地址
 type Addr struct {
 	AdminApiAddr string `yaml:"adminApiAddr"`
+	WxappApiAddr string `yaml:"wxappApiAddr"`
 	UserRpcAddr  string `yaml:"userRpcAddr"`
 }
 

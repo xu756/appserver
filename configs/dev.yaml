@@ -1,5 +1,6 @@
 addr:
   adminApiAddr: 0.0.0.0:7080
+  wxappApiAddr: 0.0.0.0:7081
   userRpcAddr: 0.0.0.0:8081
 rpc:
   userRpcAddr: 0.0.0.0:8081
