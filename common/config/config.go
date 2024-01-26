@@ -8,6 +8,7 @@ type Config struct {
 	JwtConfig   JwtConfig   `yaml:"jwtConfig"`
 	EmailConfig EmailConfig `yaml:"emailConfig"`
 	MqUrl       string      `yaml:"mqUrl"`
+	MinioConfig MinioConfig `yaml:"minioConfig"`
 }
 
 // Addr 服务地址 运行地址
@@ -47,4 +48,13 @@ type EmailConfig struct {
 	Password string `yaml:"password"`
 	From     string `yaml:"from"`
 	Host     string `yaml:"host"`
+}
+
+// MinioConfig  配置
+type MinioConfig struct {
+	Endpoint        string `yaml:"endpoint"`
+	AccessKeyID     string `yaml:"accessKeyID"`
+	SecretAccessKey string `yaml:"secretAccessKey"`
+	UseSSL          bool   `yaml:"useSSL"`
+	BucketName      string `yaml:"bucketName"`
 }

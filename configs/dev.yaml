@@ -24,3 +24,10 @@ emailConfig:
   from: grade@xynu.email
   host: smtp.feishu.cn
 mqUrl : amqp://root:Vmjsim4D@localhost:5672/
+minioConfig:
+  endpoint: cos.imlogic.cn
+  accessKeyID: k3K2znMyCwigxV4PX6gx
+  secretAccessKey: z2ZVzuyeR7KnrcImjszTCHYOYrSzWwZRntO60FDp
+  useSSL: true
+  bucketName: appadmin
+
