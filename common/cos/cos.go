@@ -2,24 +2,21 @@ package cos
 
 import (
 	"context"
+	"fmt"
 	"github.com/minio/minio-go/v7"
-	"log"
 	"server/common/config"
 )
 
 var _ Client = (*cosClient)(nil)
 
 type Client interface {
-	UploadFile(ctx context.Context) (err error)
+	UploadImg(ctx context.Context, objectName, filePath string) (url string, err error)
 }
 
-func (c cosClient) UploadFile(ctx context.Context) (err error) {
-	uploadInfo, err := c.client.FPutObject(ctx, config.RunData.MinioConfig.BucketName, "tes11t/sh.sh", "/Users/xu756/开发/小程序/appServer/idl.sh", minio.PutObjectOptions{
-		ContentType: "application/octet-stream",
-	})
+func (c cosClient) UploadImg(ctx context.Context, objectName, filePath string) (url string, err error) {
+	uploadInfo, err := c.client.FPutObject(ctx, config.RunData.MinioConfig.BucketName, "images/"+objectName, filePath, minio.PutObjectOptions{})
 	if err != nil {
-		return err
+		return "", err
 	}
-	log.Print(uploadInfo.Key)
-	return nil
+	return fmt.Sprintf("https://%s/%s/%s", config.RunData.MinioConfig.Endpoint, config.RunData.MinioConfig.BucketName, uploadInfo.Key), nil
 }

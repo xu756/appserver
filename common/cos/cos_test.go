@@ -12,10 +12,10 @@ func TestCosClient_UploadFile(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	err = client.UploadFile(context.Background())
+	url, err := client.UploadImg(context.Background(), "1.png", "/Users/xu756/Downloads/iShot_2024-01-26_00.53.42.png")
 	if err != nil {
 		t.Error(err)
 		return
 	}
-
+	t.Log(url)
 }
