@@ -17,5 +17,6 @@ func InitRouter() {
 	h.Use(middleware.HertzJwt())
 	router := h.Group("/admin")
 	LoginRouter(router.Group("/login"))
+	UploadRouter(router.Group("/upload"))
 	HttpServer = h
 }

@@ -27,7 +27,7 @@ func loginByPassword(ctx context.Context, c *app.RequestContext) {
 		SessionId: req.SessionId,
 	})
 	if err != nil {
-		result.HttpBizErr(c, err)
+		result.HttpError(c, err)
 		return
 	}
 	result.HttpSuccess(c, res)
@@ -45,7 +45,7 @@ func loginByMobile(ctx context.Context, c *app.RequestContext) {
 		SessionId: req.SessionId,
 	})
 	if err != nil {
-		result.HttpBizErr(c, err)
+		result.HttpError(c, err)
 		return
 	}
 	result.HttpSuccess(c, res)
