@@ -16,8 +16,12 @@ func LoginRouter(r *route.RouterGroup) {
 }
 
 func loginByPassword(ctx context.Context, c *app.RequestContext) {
-	var req LoginByPasswordReq
+	var req LoginReq
 	if err := c.BindAndValidate(&req); err != nil {
+		result.HttpParamErr(c)
+		return
+	}
+	if req.Username == "" || req.Password == "" {
 		result.HttpParamErr(c)
 		return
 	}
@@ -34,8 +38,12 @@ func loginByPassword(ctx context.Context, c *app.RequestContext) {
 }
 
 func loginByMobile(ctx context.Context, c *app.RequestContext) {
-	var req LoginByMobileReq
+	var req LoginReq
 	if err := c.BindAndValidate(&req); err != nil {
+		result.HttpParamErr(c)
+		return
+	}
+	if req.Mobile == "" || req.Captcha == "" {
 		result.HttpParamErr(c)
 		return
 	}

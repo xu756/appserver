@@ -16,8 +16,10 @@ func (u UserImpl) LoginByPassword(ctx context.Context, req *user.LoginByPassword
 	if userInfo.Password != req.Password {
 		return nil, xerr.ErrMsg(xerr.UserPasswordErr)
 	}
-	res.Token = "111"
-
+	res.Token, err = u.Jwt.NewJwtToken(userInfo.UUID, userInfo.Version)
+	if err != nil {
+		return nil, err
+	}
 	res.Expire = config.RunData.JwtConfig.Expire
 	return res, nil
 }
@@ -30,7 +32,10 @@ func (u UserImpl) LoginByMobile(ctx context.Context, req *user.LoginByMobileReq)
 	if req.Captcha == "1234" {
 		return nil, xerr.ErrMsg(xerr.CaptchaNotExist)
 	}
-	res.Token = userInfo.UUID
+	res.Token, err = u.Jwt.NewJwtToken(userInfo.UUID, userInfo.Version)
+	if err != nil {
+		return nil, err
+	}
 	res.Expire = config.RunData.JwtConfig.Expire
 	return res, nil
 
