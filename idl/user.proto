@@ -28,6 +28,24 @@ message SendCaptchaRes {
   bool success = 1;
 }
 
+// 组信息
+message GroupInfo{
+  int64 id = 1;
+  string uuid = 2;
+  int64 parent_id = 3;
+  int64 level = 4;
+  string name = 5;
+  string intro = 6;
+}
+
+// 用户信息
+message UserInfo{
+  int64 id = 1;
+  string uuid = 2;
+  string username = 3;
+  string mobile = 4;
+  string avatar = 5;
+}
 
 service UserSrv {
   // 用户名密码登录

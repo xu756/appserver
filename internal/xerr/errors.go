@@ -2,7 +2,6 @@ package xerr
 
 import (
 	"fmt"
-	"github.com/cloudwego/kitex/pkg/kerrors"
 )
 
 /**
@@ -49,7 +48,10 @@ func SystemErr() error {
 }
 
 func DbErr(code int32, msg string) error {
-	return kerrors.NewBizStatusError(code, message[code])
+	return CodeError{
+		Code: code,
+		Msg:  msg,
+	}
 }
 
 func DbConnectErr() error {

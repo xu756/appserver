@@ -9,7 +9,6 @@ import (
 
 func (u UserImpl) LoginByPassword(ctx context.Context, req *user.LoginByPasswordReq) (res *user.LoginRes, err error) {
 	userInfo, err := u.Model.FindUserByUsername(ctx, req.Username)
-	//log.Print(kerrors.FromBizStatusError(err))
 	if err != nil {
 		return nil, err
 	}

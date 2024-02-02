@@ -2,12 +2,12 @@ package db
 
 import (
 	"context"
-	"fmt"
+	"entgo.io/ent/dialect/sql"
 	_ "github.com/lib/pq"
 	"log"
-	"server/common/config"
 	"server/ent"
 	"server/ent/migrate"
+	"time"
 )
 
 type customModel struct {
@@ -16,18 +16,16 @@ type customModel struct {
 
 func NewModel() Model {
 	dsn := "host=%s user=%s password=%s dbname=%s port=%d  TimeZone=Asia/Shanghai sslmode=disable"
-	c := config.RunData.DbConfig
-	dsn = fmt.Sprintf(dsn, c.Addr, c.Username, c.Password, c.DbName, c.Port)
-	client, err := ent.Open("postgres", dsn)
+	drv, err := sql.Open("postgres", dsn)
 	if err != nil {
 		log.Panic(err)
 	}
-	err = CreateTable(client)
-	if err != nil {
-		log.Panic(err)
-	}
+	db := drv.DB()
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(100)
+	db.SetConnMaxLifetime(time.Hour)
 	return &customModel{
-		client: client,
+		client: ent.NewClient(ent.Driver(drv)),
 	}
 }
 
