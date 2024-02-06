@@ -35,6 +35,8 @@ const (
 	FieldMobile = "mobile"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 )
@@ -53,6 +55,7 @@ var Columns = []string{
 	FieldPassword,
 	FieldMobile,
 	FieldAvatar,
+	FieldCategory,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -84,6 +87,8 @@ var (
 	DefaultUUID func() string
 	// DefaultAvatar holds the default value on creation for the "avatar" field.
 	DefaultAvatar string
+	// DefaultCategory holds the default value on creation for the "category" field.
+	DefaultCategory string
 )
 
 // OrderOption defines the ordering options for the User queries.
@@ -147,4 +152,9 @@ func ByMobile(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatar orders the results by the avatar field.
 func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatar, opts...).ToFunc()
+}
+
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
