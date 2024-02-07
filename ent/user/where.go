@@ -109,9 +109,9 @@ func Avatar(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldAvatar, v))
 }
 
-// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
-func Category(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldCategory, v))
+// Device applies equality check predicate on the "device" field. It's identical to DeviceEQ.
+func Device(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldDevice, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -649,69 +649,69 @@ func AvatarContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldAvatar, v))
 }
 
-// CategoryEQ applies the EQ predicate on the "category" field.
-func CategoryEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldCategory, v))
+// DeviceEQ applies the EQ predicate on the "device" field.
+func DeviceEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldDevice, v))
 }
 
-// CategoryNEQ applies the NEQ predicate on the "category" field.
-func CategoryNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldCategory, v))
+// DeviceNEQ applies the NEQ predicate on the "device" field.
+func DeviceNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldDevice, v))
 }
 
-// CategoryIn applies the In predicate on the "category" field.
-func CategoryIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldCategory, vs...))
+// DeviceIn applies the In predicate on the "device" field.
+func DeviceIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldDevice, vs...))
 }
 
-// CategoryNotIn applies the NotIn predicate on the "category" field.
-func CategoryNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldCategory, vs...))
+// DeviceNotIn applies the NotIn predicate on the "device" field.
+func DeviceNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldDevice, vs...))
 }
 
-// CategoryGT applies the GT predicate on the "category" field.
-func CategoryGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldCategory, v))
+// DeviceGT applies the GT predicate on the "device" field.
+func DeviceGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldDevice, v))
 }
 
-// CategoryGTE applies the GTE predicate on the "category" field.
-func CategoryGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldCategory, v))
+// DeviceGTE applies the GTE predicate on the "device" field.
+func DeviceGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldDevice, v))
 }
 
-// CategoryLT applies the LT predicate on the "category" field.
-func CategoryLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldCategory, v))
+// DeviceLT applies the LT predicate on the "device" field.
+func DeviceLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldDevice, v))
 }
 
-// CategoryLTE applies the LTE predicate on the "category" field.
-func CategoryLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldCategory, v))
+// DeviceLTE applies the LTE predicate on the "device" field.
+func DeviceLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldDevice, v))
 }
 
-// CategoryContains applies the Contains predicate on the "category" field.
-func CategoryContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldCategory, v))
+// DeviceContains applies the Contains predicate on the "device" field.
+func DeviceContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldDevice, v))
 }
 
-// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
-func CategoryHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldCategory, v))
+// DeviceHasPrefix applies the HasPrefix predicate on the "device" field.
+func DeviceHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldDevice, v))
 }
 
-// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
-func CategoryHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldCategory, v))
+// DeviceHasSuffix applies the HasSuffix predicate on the "device" field.
+func DeviceHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldDevice, v))
 }
 
-// CategoryEqualFold applies the EqualFold predicate on the "category" field.
-func CategoryEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldCategory, v))
+// DeviceEqualFold applies the EqualFold predicate on the "device" field.
+func DeviceEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldDevice, v))
 }
 
-// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
-func CategoryContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldCategory, v))
+// DeviceContainsFold applies the ContainsFold predicate on the "device" field.
+func DeviceContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldDevice, v))
 }
 
 // And groups predicates with the AND operator between them.

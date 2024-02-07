@@ -40,8 +40,8 @@ type User struct {
 	Mobile string `json:"mobile,omitempty"`
 	// 头像
 	Avatar string `json:"avatar,omitempty"`
-	// 类别
-	Category     string `json:"category,omitempty"`
+	// 设备
+	Device       string `json:"device,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -54,7 +54,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case user.FieldID, user.FieldCreator, user.FieldEditor, user.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case user.FieldUUID, user.FieldUsername, user.FieldPassword, user.FieldMobile, user.FieldAvatar, user.FieldCategory:
+		case user.FieldUUID, user.FieldUsername, user.FieldPassword, user.FieldMobile, user.FieldAvatar, user.FieldDevice:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -145,11 +145,11 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.Avatar = value.String
 			}
-		case user.FieldCategory:
+		case user.FieldDevice:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category", values[i])
+				return fmt.Errorf("unexpected type %T for field device", values[i])
 			} else if value.Valid {
-				u.Category = value.String
+				u.Device = value.String
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -220,8 +220,8 @@ func (u *User) String() string {
 	builder.WriteString("avatar=")
 	builder.WriteString(u.Avatar)
 	builder.WriteString(", ")
-	builder.WriteString("category=")
-	builder.WriteString(u.Category)
+	builder.WriteString("device=")
+	builder.WriteString(u.Device)
 	builder.WriteByte(')')
 	return builder.String()
 }

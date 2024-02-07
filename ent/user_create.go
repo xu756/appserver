@@ -150,16 +150,16 @@ func (uc *UserCreate) SetNillableAvatar(s *string) *UserCreate {
 	return uc
 }
 
-// SetCategory sets the "category" field.
-func (uc *UserCreate) SetCategory(s string) *UserCreate {
-	uc.mutation.SetCategory(s)
+// SetDevice sets the "device" field.
+func (uc *UserCreate) SetDevice(s string) *UserCreate {
+	uc.mutation.SetDevice(s)
 	return uc
 }
 
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (uc *UserCreate) SetNillableCategory(s *string) *UserCreate {
+// SetNillableDevice sets the "device" field if the given value is not nil.
+func (uc *UserCreate) SetNillableDevice(s *string) *UserCreate {
 	if s != nil {
-		uc.SetCategory(*s)
+		uc.SetDevice(*s)
 	}
 	return uc
 }
@@ -237,9 +237,9 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultAvatar
 		uc.mutation.SetAvatar(v)
 	}
-	if _, ok := uc.mutation.Category(); !ok {
-		v := user.DefaultCategory
-		uc.mutation.SetCategory(v)
+	if _, ok := uc.mutation.Device(); !ok {
+		v := user.DefaultDevice
+		uc.mutation.SetDevice(v)
 	}
 }
 
@@ -278,8 +278,8 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Avatar(); !ok {
 		return &ValidationError{Name: "avatar", err: errors.New(`ent: missing required field "User.avatar"`)}
 	}
-	if _, ok := uc.mutation.Category(); !ok {
-		return &ValidationError{Name: "category", err: errors.New(`ent: missing required field "User.category"`)}
+	if _, ok := uc.mutation.Device(); !ok {
+		return &ValidationError{Name: "device", err: errors.New(`ent: missing required field "User.device"`)}
 	}
 	return nil
 }
@@ -357,9 +357,9 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldAvatar, field.TypeString, value)
 		_node.Avatar = value
 	}
-	if value, ok := uc.mutation.Category(); ok {
-		_spec.SetField(user.FieldCategory, field.TypeString, value)
-		_node.Category = value
+	if value, ok := uc.mutation.Device(); ok {
+		_spec.SetField(user.FieldDevice, field.TypeString, value)
+		_node.Device = value
 	}
 	return _node, _spec
 }

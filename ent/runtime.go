@@ -145,10 +145,10 @@ func init() {
 	userDescAvatar := userFields[4].Descriptor()
 	// user.DefaultAvatar holds the default value on creation for the avatar field.
 	user.DefaultAvatar = userDescAvatar.Default.(string)
-	// userDescCategory is the schema descriptor for category field.
-	userDescCategory := userFields[5].Descriptor()
-	// user.DefaultCategory holds the default value on creation for the category field.
-	user.DefaultCategory = userDescCategory.Default.(string)
+	// userDescDevice is the schema descriptor for device field.
+	userDescDevice := userFields[5].Descriptor()
+	// user.DefaultDevice holds the default value on creation for the device field.
+	user.DefaultDevice = userDescDevice.Default.(string)
 	usergroupMixin := schema.UserGroup{}.Mixin()
 	usergroupMixinFields0 := usergroupMixin[0].Fields()
 	_ = usergroupMixinFields0

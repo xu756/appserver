@@ -2081,7 +2081,7 @@ type UserMutation struct {
 	password      *string
 	mobile        *string
 	avatar        *string
-	category      *string
+	device        *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*User, error)
@@ -2648,40 +2648,40 @@ func (m *UserMutation) ResetAvatar() {
 	m.avatar = nil
 }
 
-// SetCategory sets the "category" field.
-func (m *UserMutation) SetCategory(s string) {
-	m.category = &s
+// SetDevice sets the "device" field.
+func (m *UserMutation) SetDevice(s string) {
+	m.device = &s
 }
 
-// Category returns the value of the "category" field in the mutation.
-func (m *UserMutation) Category() (r string, exists bool) {
-	v := m.category
+// Device returns the value of the "device" field in the mutation.
+func (m *UserMutation) Device() (r string, exists bool) {
+	v := m.device
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCategory returns the old "category" field's value of the User entity.
+// OldDevice returns the old "device" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldCategory(ctx context.Context) (v string, err error) {
+func (m *UserMutation) OldDevice(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCategory is only allowed on UpdateOne operations")
+		return v, errors.New("OldDevice is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCategory requires an ID field in the mutation")
+		return v, errors.New("OldDevice requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCategory: %w", err)
+		return v, fmt.Errorf("querying old value for OldDevice: %w", err)
 	}
-	return oldValue.Category, nil
+	return oldValue.Device, nil
 }
 
-// ResetCategory resets all changes to the "category" field.
-func (m *UserMutation) ResetCategory() {
-	m.category = nil
+// ResetDevice resets all changes to the "device" field.
+func (m *UserMutation) ResetDevice() {
+	m.device = nil
 }
 
 // Where appends a list predicates to the UserMutation builder.
@@ -2752,8 +2752,8 @@ func (m *UserMutation) Fields() []string {
 	if m.avatar != nil {
 		fields = append(fields, user.FieldAvatar)
 	}
-	if m.category != nil {
-		fields = append(fields, user.FieldCategory)
+	if m.device != nil {
+		fields = append(fields, user.FieldDevice)
 	}
 	return fields
 }
@@ -2785,8 +2785,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Mobile()
 	case user.FieldAvatar:
 		return m.Avatar()
-	case user.FieldCategory:
-		return m.Category()
+	case user.FieldDevice:
+		return m.Device()
 	}
 	return nil, false
 }
@@ -2818,8 +2818,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldMobile(ctx)
 	case user.FieldAvatar:
 		return m.OldAvatar(ctx)
-	case user.FieldCategory:
-		return m.OldCategory(ctx)
+	case user.FieldDevice:
+		return m.OldDevice(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -2906,12 +2906,12 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAvatar(v)
 		return nil
-	case user.FieldCategory:
+	case user.FieldDevice:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCategory(v)
+		m.SetDevice(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -3034,8 +3034,8 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldAvatar:
 		m.ResetAvatar()
 		return nil
-	case user.FieldCategory:
-		m.ResetCategory()
+	case user.FieldDevice:
+		m.ResetDevice()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

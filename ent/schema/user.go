@@ -31,7 +31,7 @@ func (User) Fields() []ent.Field {
 		field.String("password").Comment("密码"),
 		field.String("mobile").Unique().Comment("手机号"),
 		field.String("avatar").Comment("头像").Default("https://cos.imlogic.cn/appadmin/images/avatar.jpeg"),
-		field.String("category").Default("mini").Immutable().Comment("类别"),
+		field.String("device").Default("mini").Immutable().Comment("设备"),
 	}
 }
 
