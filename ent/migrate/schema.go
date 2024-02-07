@@ -63,6 +63,7 @@ var (
 		{Name: "password", Type: field.TypeString},
 		{Name: "mobile", Type: field.TypeString, Unique: true},
 		{Name: "avatar", Type: field.TypeString, Default: "https://cos.imlogic.cn/appadmin/images/avatar.jpeg"},
+		{Name: "category", Type: field.TypeString, Default: "mini"},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
