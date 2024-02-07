@@ -8,20 +8,21 @@ import (
 )
 
 type dbUserModel interface {
-	FindUserByUsername(ctx context.Context, username string) (userInfo *ent.User, err error)
-	FindUserByMobile(ctx context.Context, mobile string) (userInfo *ent.User, err error)
-	CreateUser(ctx context.Context, username, password, mobile string, creator int64) (userInfo *ent.User, err error)
-	UpdateUserAvatar(ctx context.Context, uuid string, avatar string, editor int64) (userInfo *ent.User, err error)
+	FindUserByUsername(ctx context.Context, username, device string) (userInfo *ent.User, err error)
+	FindUserByMobile(ctx context.Context, mobile, device string) (userInfo *ent.User, err error)
+	FindUserByUUID(tx *ent.Tx, uuid string) (userInfo *ent.User, err error)
+	CreateUser(ctx context.Context, username, password, mobile, device string, creator int64) (userInfo *ent.User, err error)
+	UpdateUserAvatar(ctx context.Context, uuid string, avatar, device string, editor int64) (userInfo *ent.User, err error)
 }
 
 // FindUserByUsername 根据用户名查找用户
-func (m *customModel) FindUserByUsername(ctx context.Context, username string) (userInfo *ent.User, err error) {
+func (m *customModel) FindUserByUsername(ctx context.Context, username, device string) (userInfo *ent.User, err error) {
 	tx, err := m.client.Tx(ctx)
 	if err != nil {
 		return nil, xerr.DbConnectErr()
 	}
 	userInfo, err = tx.User.Query().
-		Where(user.Username(username), user.Deleted(false)).First(ctx)
+		Where(user.Username(username), user.Deleted(false), user.Device(device)).First(ctx)
 	switch {
 	case ent.IsNotFound(err):
 		return nil, xerr.ErrMsg(xerr.UserNotExist)
@@ -47,13 +48,13 @@ func FindUserByUUID(tx *ent.Tx, uuid string) (userInfo *ent.User, err error) {
 }
 
 // FindUserByMobile 根据手机号查找用户
-func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (userInfo *ent.User, err error) {
+func (m *customModel) FindUserByMobile(ctx context.Context, mobile, device string) (userInfo *ent.User, err error) {
 	tx, err := m.client.Tx(ctx)
 	if err != nil {
 		return nil, xerr.DbConnectErr()
 	}
 	userInfo, err = tx.User.Query().
-		Where(user.Mobile(mobile), user.Deleted(false)).First(ctx)
+		Where(user.Mobile(mobile), user.Device(device), user.Deleted(false)).First(ctx)
 	switch {
 	case ent.IsNotFound(err):
 		return nil, xerr.ErrMsg(xerr.UserNotExist)
@@ -65,7 +66,7 @@ func (m *customModel) FindUserByMobile(ctx context.Context, mobile string) (user
 }
 
 // CreateUser 创建用户
-func (m *customModel) CreateUser(ctx context.Context, username, password, mobile string, creator int64) (userInfo *ent.User, err error) {
+func (m *customModel) CreateUser(ctx context.Context, username, password, mobile, device string, creator int64) (userInfo *ent.User, err error) {
 	tx, err := m.client.Tx(ctx)
 	if err != nil {
 		return nil, xerr.DbConnectErr()
@@ -76,6 +77,7 @@ func (m *customModel) CreateUser(ctx context.Context, username, password, mobile
 		SetMobile(mobile).
 		SetCreator(creator).
 		SetEditor(creator).
+		SetDevice(device).
 		SetVersion(1).
 		Save(ctx)
 	switch {

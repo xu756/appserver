@@ -29,6 +29,7 @@ func loginByPassword(ctx context.Context, c *app.RequestContext) {
 		Username:  req.Username,
 		Password:  req.Password,
 		SessionId: req.SessionId,
+		Device:    "admin",
 	})
 	if err != nil {
 		result.HttpError(c, err)
@@ -51,6 +52,7 @@ func loginByMobile(ctx context.Context, c *app.RequestContext) {
 		Mobile:    req.Mobile,
 		Captcha:   req.Captcha,
 		SessionId: req.SessionId,
+		Device:    "admin",
 	})
 	if err != nil {
 		result.HttpError(c, err)
@@ -68,6 +70,7 @@ func sendCaptcha(ctx context.Context, c *app.RequestContext) {
 	}
 	res, err := rpc.UserClient.SendCaptcha(ctx, &user.SendCaptchaReq{
 		Mobile:    req.Mobile,
+		Device:    "admin",
 		SessionId: req.SessionId,
 	})
 	if err != nil {

@@ -10,7 +10,7 @@ import (
 func TestCustomModel_FindUserByUsername(t *testing.T) {
 	config.Init("../../configs/dev.yaml")
 	m := NewModel()
-	userInfo, err := m.FindUserByUsername(context.Background(), "test")
+	userInfo, err := m.FindUserByUsername(context.Background(), "test", "mini")
 	if err != nil {
 		t.Error(err)
 		return
@@ -22,7 +22,7 @@ func TestCustomModel_FindUserByUsername(t *testing.T) {
 func TestCustomModel_FindUserByMobile(t *testing.T) {
 	config.Init("../../configs/dev.yaml")
 	m := NewModel()
-	userInfo, err := m.FindUserByMobile(context.Background(), "12345678101")
+	userInfo, err := m.FindUserByMobile(context.Background(), "12345678101", "mini")
 	if err != nil {
 		t.Error(err)
 		return
@@ -34,7 +34,7 @@ func TestCustomModel_FindUserByMobile(t *testing.T) {
 func TestCustomModel_CreateUser(t *testing.T) {
 	config.Init("../../configs/dev.yaml")
 	m := NewModel()
-	user, err := m.CreateUser(context.TODO(), "test", "test", "12345678902", 0)
+	user, err := m.CreateUser(context.TODO(), "test", "test", "12345678902", "mini", 0)
 	if err != nil {
 		t.Error(err)
 		return
@@ -46,7 +46,7 @@ func TestCustomModel_CreateUser(t *testing.T) {
 func TestCustomModel_UpdateUserAvatar(t *testing.T) {
 	config.Init("../../configs/dev.yaml")
 	m := NewModel()
-	user, err := m.UpdateUserAvatar(context.Background(), "4c630aed-387f-4ebb-a3ba-ed40bb44f5a1", "test", 0)
+	user, err := m.UpdateUserAvatar(context.Background(), "4c630aed-387f-4ebb-a3ba-ed40bb44f5a1", "test", "mini", 0)
 	if err != nil {
 		t.Error(err)
 		return

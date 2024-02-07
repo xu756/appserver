@@ -8,12 +8,14 @@ message LoginByPasswordReq {
   string username = 1;
   string password = 2;
   string session_id = 3;
+  string device = 4;
 }
 
 message LoginByMobileReq {
   string mobile = 1;
   string captcha = 2;
   string session_id = 3;
+  string device = 4;
 }
 
 message LoginRes {
@@ -23,6 +25,7 @@ message LoginRes {
 message SendCaptchaReq {
   string session_id = 1;
   string mobile = 2;
+  string device = 3;
 }
 message SendCaptchaRes {
   bool success = 1;
